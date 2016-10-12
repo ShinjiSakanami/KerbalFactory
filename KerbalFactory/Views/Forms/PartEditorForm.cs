@@ -8,13 +8,13 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 
-namespace KerbalFactory
+namespace KerbalFactory.Views
 {
-    public partial class Form1 : Form
+    public partial class PartEditorForm : BaseForm
     {
-        public Form1()
+        public PartEditorForm()
         {
-            InitializeComponent();
+            this.InitializeComponent();
         }
     }
 }

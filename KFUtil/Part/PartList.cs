@@ -1,0 +1,136 @@
+﻿using System.Collections;
+using System.Collections.Generic;
+
+namespace KFUtil
+{
+    public class PartList : IEnumerable, IEnumerable<Part>
+    {
+        private Dictionary<string, Part> _dict;
+
+        public Part this[string name]
+        {
+            get
+            {
+                return this.Get(name);
+            }
+        }
+
+        public int Count
+        {
+            get
+            {
+                return this._dict.Count;
+            }
+        }
+
+        public PartList()
+        {
+            this._dict = new Dictionary<string, Part>();
+        }
+
+        public Part Add(UrlConfig urlConfig)
+        {
+            ConfigNode node = urlConfig.Config;
+            if (!node.HasValue("name"))
+            {
+                Debug.LogWarning("Config has no name field");
+                return null;
+            }
+            string name = node.GetValue("name");
+            if (this.Contains(name))
+            {
+                Debug.LogWarning("PartList: Already contains part of name '" + name + "'");
+                return null;
+            }
+            Part part = new Part();
+            part.Load(urlConfig, node);
+            PDebug.Log(string.Concat(new object[]
+            {
+                "Part: ",
+                part.Title,
+                "(",
+                part.Name,
+                ")"
+            }));
+            this._dict.Add(part.Name, part);
+            return part;
+        }
+
+        public Part Add(ConfigNode node)
+        {
+            if (!node.HasValue("name"))
+            {
+                Debug.LogWarning("Config has no name field");
+                return null;
+            }
+            string name = node.GetValue("name");
+            if (this.Contains(name))
+            {
+                Debug.LogWarning("PartList: Already contains part of name '" + name + "'");
+                return null;
+            }
+            Part part = new Part();
+            part.Load(node);
+            PDebug.Log(string.Concat(new object[]
+            {
+                "Part: ",
+                part.Title,
+                "(",
+                part.Name,
+                ")"
+            }));
+            this._dict.Add(part.Name, part);
+            return part;
+        }
+
+        public void Add(Part part)
+        {
+            if (this.Contains(part.Name))
+            {
+                Debug.LogWarning("PartList: Already contains part of name '" + part.Name + "'");
+                return;
+            }
+            this._dict.Add(part.Name, part);
+        }
+
+        public bool Contains(string name)
+        {
+            return this._dict.ContainsKey(name);
+        }
+
+        public Part Get(string name)
+        {
+            Part result;
+            if (this._dict.TryGetValue(name, out result))
+            {
+                return result;
+            }
+            return null;
+        }
+
+        public bool Remove(Part part)
+        {
+            return this._dict.Remove(part.Name);
+        }
+
+        public bool Remove(string name)
+        {
+            return this._dict.Remove(name);
+        }
+
+        public void Clear()
+        {
+            this._dict.Clear();
+        }
+
+        IEnumerator IEnumerable.GetEnumerator()
+        {
+            return this._dict.Values.GetEnumerator();
+        }
+
+        IEnumerator<Part> IEnumerable<Part>.GetEnumerator()
+        {
+            return this._dict.Values.GetEnumerator();
+        }
+    }
+}

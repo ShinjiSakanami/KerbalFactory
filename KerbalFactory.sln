@@ -5,6 +5,8 @@ VisualStudioVersion = 14.0.25420.1
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "KerbalFactory", "KerbalFactory\KerbalFactory.csproj", "{16A1B034-F675-4670-B3DD-AC4FC38B808B}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "KFUtil", "KFUtil\KFUtil.csproj", "{D483F5E6-5C9B-4C2D-AD3C-0C1CAC646839}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -15,6 +17,10 @@ Global
 		{16A1B034-F675-4670-B3DD-AC4FC38B808B}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{16A1B034-F675-4670-B3DD-AC4FC38B808B}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{16A1B034-F675-4670-B3DD-AC4FC38B808B}.Release|Any CPU.Build.0 = Release|Any CPU
+		{D483F5E6-5C9B-4C2D-AD3C-0C1CAC646839}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{D483F5E6-5C9B-4C2D-AD3C-0C1CAC646839}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{D483F5E6-5C9B-4C2D-AD3C-0C1CAC646839}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{D483F5E6-5C9B-4C2D-AD3C-0C1CAC646839}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
