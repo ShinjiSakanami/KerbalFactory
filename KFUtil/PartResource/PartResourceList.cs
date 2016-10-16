@@ -61,7 +61,7 @@ namespace KFUtil
             PartResource res = new PartResource(this._part);
             res.SetInfo(def);
             res.Load(node);
-            this._dict.Add(def.Id, res);
+            this._dict.Add(def.id, res);
             return res;
         }
 
@@ -69,7 +69,7 @@ namespace KFUtil
         {
             PartResource partResource = new PartResource(this._part);
             partResource.Copy(res);
-            this._dict.Add(partResource.Info.Id, partResource);
+            this._dict.Add(partResource.Info.id, partResource);
             return partResource;
         }
 
@@ -87,16 +87,16 @@ namespace KFUtil
                 return null;
             }
             PartResource res = new PartResource(this._part);
-            res.ResourceName = name;
+            res.name = name;
             res.SetInfo(def);
-            res.Amount = amount;
-            res.MaxAmount = maxAmount;
-            res.FlowState = flowState;
-            res.IsTweakable = isTweakable;
-            res.HideFlow = hideFlow;
-            res.IsVisible = isVisible;
-            res.ResourceFlowMode = flow;
-            this._dict.Add(def.Id, res);
+            res.amount = amount;
+            res.maxAmount = maxAmount;
+            res.flowState = flowState;
+            res.isTweakable = isTweakable;
+            res.hideFlow = hideFlow;
+            res.isVisible = isVisible;
+            res.flowMode = flow;
+            this._dict.Add(def.id, res);
             return res;
         }
 
@@ -127,7 +127,7 @@ namespace KFUtil
 
         public bool Remove(PartResource res)
         {
-            return this._dict.Remove(res.Info.Id);
+            return this._dict.Remove(res.Info.id);
         }
 
         public bool Remove(string name)

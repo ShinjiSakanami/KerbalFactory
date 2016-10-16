@@ -5,21 +5,9 @@ namespace KFUtil
 {
     public class ConfigFileType : IEnumerable
     {
-        private UrlFile.FileType _type;
+        public UrlFile.FileType type;
 
         private List<string> _extensions;
-
-        public UrlFile.FileType Type
-        {
-            get
-            {
-                return _type;
-            }
-            set
-            {
-                this._type = value;
-            }
-        }
 
         public List<string> Extensions
         {
@@ -39,19 +27,19 @@ namespace KFUtil
 
         public ConfigFileType()
         {
-            this._type = UrlFile.FileType.Unknown;
+            this.type = UrlFile.FileType.Unknown;
             this._extensions = new List<string>();
         }
 
         public ConfigFileType(UrlFile.FileType fileType)
         {
-            this._type = fileType;
+            this.type = fileType;
             this._extensions = new List<string>();
         }
 
         public ConfigFileType(UrlFile.FileType fileType, string[] extensions)
         {
-            this._type = fileType;
+            this.type = fileType;
             this._extensions = new List<string>(extensions);
         }
 

@@ -55,12 +55,12 @@ namespace KFUtil
             PDebug.Log(string.Concat(new object[]
             {
                 "ResourceDefinition: ",
-                def.Name,
+                def.name,
                 "(",
-                def.Id,
+                def.id,
                 ")"
             }));
-            this._dict.Add(def.Id, def);
+            this._dict.Add(def.id, def);
             return def;
         }
 
@@ -82,23 +82,23 @@ namespace KFUtil
             PDebug.Log(string.Concat(new object[]
             {
                 "ResourceDefinition: ",
-                def.Name,
+                def.name,
                 "(",
-                def.Id,
+                def.id,
                 ")"
             }));
-            this._dict.Add(def.Id, def);
+            this._dict.Add(def.id, def);
             return def;
         }
 
         public void Add(PartResourceDefinition def)
         {
-            if (this.Contains(def.Name))
+            if (this.Contains(def.name))
             {
-                Debug.LogWarning("PartResourceList: Already contains resource of name '" + def.Name + "'");
+                Debug.LogWarning("PartResourceList: Already contains resource of name '" + def.name + "'");
                 return;
             }
-            this._dict.Add(def.Id, def);
+            this._dict.Add(def.id, def);
         }
 
         public bool Contains(int id)
@@ -128,7 +128,7 @@ namespace KFUtil
 
         public bool Remove(PartResourceDefinition def)
         {
-            return this._dict.Remove(def.Id);
+            return this._dict.Remove(def.id);
         }
 
         public bool Remove(string name)

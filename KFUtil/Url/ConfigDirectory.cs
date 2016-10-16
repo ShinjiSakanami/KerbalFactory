@@ -2,60 +2,24 @@
 {
     public class ConfigDirectory
     {
-        private string _directory;
+        public string directory;
 
-        private string _urlRoot;
+        public string urlRoot;
 
-        private UrlDir.DirectoryType _type;
-
-        public string Directory
-        {
-            get
-            {
-                return _directory;
-            }
-            set
-            {
-                this._directory = value;
-            }
-        }
-
-        public string UrlRoot
-        {
-            get
-            {
-                return _urlRoot;
-            }
-            set
-            {
-                this._urlRoot = value;
-            }
-        }
-
-        public UrlDir.DirectoryType Type
-        {
-            get
-            {
-                return _type;
-            }
-            set
-            {
-                this._type = value;
-            }
-        }
+        public UrlDir.DirectoryType type;
 
         public ConfigDirectory()
         {
-            this._urlRoot = string.Empty;
-            this._directory = ".";
-            this._type = UrlDir.DirectoryType.Parts;
+            this.urlRoot = string.Empty;
+            this.directory = ".";
+            this.type = UrlDir.DirectoryType.Parts;
         }
 
         public ConfigDirectory(string urlRoot, string directory, UrlDir.DirectoryType type)
         {
-            this._urlRoot = urlRoot;
-            this._directory = directory;
-            this._type = type;
+            this.urlRoot = urlRoot;
+            this.directory = directory;
+            this.type = type;
         }
     }
 }

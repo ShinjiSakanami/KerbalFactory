@@ -121,10 +121,10 @@ namespace KFUtil
 
         private UrlDir(UrlDir root, ConfigDirectory rootInfo)
         {
-            string path = UrlDir.CreateKSPPath(rootInfo.Directory);
+            string path = UrlDir.CreateKSPPath(rootInfo.directory);
             DirectoryInfo info = Directory.CreateDirectory(path);
-            this._name = rootInfo.UrlRoot;
-            this._type = rootInfo.Type;
+            this._name = rootInfo.urlRoot;
+            this._type = rootInfo.type;
             this.Create(root, info);
         }
 

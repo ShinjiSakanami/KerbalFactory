@@ -2,56 +2,21 @@
 using System.Collections.Generic;
 using System.Globalization;
 using System.IO;
+using System.Reflection;
 
 namespace KFUtil
 {
     public class ConfigNode
     {
-        private string _name;
+        public string name;
 
-        private string _id;
+        public string id;
 
-        private string _comment;
+        public string comment;
 
         private ConfigValueList _values;
 
         private ConfigNodeList _nodes;
-
-        public string Name
-        {
-            get
-            {
-                return _name;
-            }
-            set
-            {
-                this._name = value;
-            }
-        }
-
-        public string Id
-        {
-            get
-            {
-                return _id;
-            }
-            set
-            {
-                this._id = value;
-            }
-        }
-
-        public string Comment
-        {
-            get
-            {
-                return _comment;
-            }
-            set
-            {
-                this._comment = value;
-            }
-        }
 
         public ConfigValueList Values
         {
@@ -87,17 +52,17 @@ namespace KFUtil
 
         public ConfigNode()
         {
-            this._name = string.Empty;
-            this._id = string.Empty;
+            this.name = string.Empty;
+            this.id = string.Empty;
             this._values = new ConfigValueList();
             this._nodes = new ConfigNodeList();
         }
 
         public ConfigNode(string name)
         {
-            this._name = ConfigNode.CleanupInput(name);
-            this._id = string.Empty;
-            string[] array = this._name.Split(new char[]
+            this.name = ConfigNode.CleanupInput(name);
+            this.id = string.Empty;
+            string[] array = this.name.Split(new char[]
             {
                 '(',
                 ' ',
@@ -105,8 +70,8 @@ namespace KFUtil
             }, StringSplitOptions.RemoveEmptyEntries);
             if (array.Length > 1)
             {
-                this._name = array[0];
-                this._id = array[1];
+                this.name = array[0];
+                this.id = array[1];
             }
             this._values = new ConfigValueList();
             this._nodes = new ConfigNodeList();
@@ -114,10 +79,10 @@ namespace KFUtil
 
         public ConfigNode(string name, string comment)
         {
-            this._name = ConfigNode.CleanupInput(name);
-            this._id = string.Empty;
-            this._comment = comment;
-            string[] array = this._name.Split(new char[]
+            this.name = ConfigNode.CleanupInput(name);
+            this.id = string.Empty;
+            this.comment = comment;
+            string[] array = this.name.Split(new char[]
             {
                 '(',
                 ' ',
@@ -125,8 +90,8 @@ namespace KFUtil
             }, StringSplitOptions.RemoveEmptyEntries);
             if (array.Length > 1)
             {
-                this._name = array[0];
-                this._id = array[1];
+                this.name = array[0];
+                this.id = array[1];
             }
             this._values = new ConfigValueList();
             this._nodes = new ConfigNodeList();
@@ -155,7 +120,22 @@ namespace KFUtil
             return null;
         }
 
-        internal void Save(string _fullPath)
+        public static bool LoadObjectFromConfig(object obj, ConfigNode node, bool removeAfterUse)
+        {
+            if (!ConfigNode.ReadObject(obj, node))
+            {
+                return false;
+            }
+            if (removeAfterUse)
+            {
+                node.RemoveValues(string.Empty);
+                node.RemoveNodes(string.Empty);
+                removeAfterUse = false;
+            }
+            return true;
+        }
+
+        public void Save(string fileFullName)
         {
             throw new NotImplementedException();
         }
@@ -173,7 +153,7 @@ namespace KFUtil
         public void CopyTo(ConfigNode node, string newName)
         {
             this.CopyToRecursive(node, false);
-            node.Name = newName;
+            node.name = newName;
         }
 
         public ConfigNode CreateCopy()
@@ -194,12 +174,12 @@ namespace KFUtil
             for (int i = 0; i < count; i++)
             {
                 ConfigValue value = node.Values[i];
-                this.AddValue(value.Name, value.Value, value.Comment);
+                this.AddValue(value.name, value.value, value.comment);
             }
             int count2 = node.Nodes.Count;
             for (int j = 0; j < count2; j++)
             {
-                ConfigNode node2 = this.AddNode(node.Nodes[j].Name);
+                ConfigNode node2 = this.AddNode(node.Nodes[j].name);
                 node.Nodes[j].CopyTo(node2);
             }
         }
@@ -324,7 +304,7 @@ namespace KFUtil
             for (int i = 0; i < count; i++)
             {
                 ConfigNode node = this._nodes[i];
-                if (node.Id == id)
+                if (node.id == id)
                 {
                     return true;
                 }
@@ -338,7 +318,7 @@ namespace KFUtil
             for (int i = 0; i < count; i++)
             {
                 ConfigNode node = this._nodes[i];
-                if (node.Name == name)
+                if (node.name == name)
                 {
                     return true;
                 }
@@ -385,7 +365,7 @@ namespace KFUtil
             {
                 return null;
             }
-            node.Name = name;
+            node.name = name;
             this._nodes.Add(node);
             return node;
         }
@@ -470,24 +450,9 @@ namespace KFUtil
             return ConfigNode.RecurseFormat(ConfigNode.PreFormatConfig(cfgData));
         }
 
-        public static bool ParseBool(string boolString)
-        {
-            return bool.Parse(boolString);
-        }
-
-        public static int ParseInt(string intString)
-        {
-            return int.Parse(intString, CultureInfo.InvariantCulture);
-        }
-
-        public static double ParseDouble(string doubleString)
-        {
-            return double.Parse(doubleString, CultureInfo.InvariantCulture);
-        }
-
         public static Enum ParseEnum(Type enumType, string enumString)
         {
-            return (Enum)Enum.Parse(enumType, enumString);
+            return (Enum)Enum.Parse(enumType, enumString, true);
         }
 
         public static Color ParseColor(string colorString)
@@ -605,22 +570,22 @@ namespace KFUtil
             if (array.Length == 16)
             {
                 Matrix4x4 matrix = Matrix4x4.Identity;
-                matrix.M00 = double.Parse(array[0], CultureInfo.InvariantCulture);
-                matrix.M01 = double.Parse(array[1], CultureInfo.InvariantCulture);
-                matrix.M02 = double.Parse(array[2], CultureInfo.InvariantCulture);
-                matrix.M03 = double.Parse(array[3], CultureInfo.InvariantCulture);
-                matrix.M10 = double.Parse(array[4], CultureInfo.InvariantCulture);
-                matrix.M11 = double.Parse(array[5], CultureInfo.InvariantCulture);
-                matrix.M12 = double.Parse(array[6], CultureInfo.InvariantCulture);
-                matrix.M13 = double.Parse(array[7], CultureInfo.InvariantCulture);
-                matrix.M20 = double.Parse(array[8], CultureInfo.InvariantCulture);
-                matrix.M21 = double.Parse(array[9], CultureInfo.InvariantCulture);
-                matrix.M22 = double.Parse(array[10], CultureInfo.InvariantCulture);
-                matrix.M23 = double.Parse(array[11], CultureInfo.InvariantCulture);
-                matrix.M30 = double.Parse(array[12], CultureInfo.InvariantCulture);
-                matrix.M31 = double.Parse(array[13], CultureInfo.InvariantCulture);
-                matrix.M32 = double.Parse(array[14], CultureInfo.InvariantCulture);
-                matrix.M33 = double.Parse(array[15], CultureInfo.InvariantCulture);
+                matrix.m00 = double.Parse(array[0], CultureInfo.InvariantCulture);
+                matrix.m01 = double.Parse(array[1], CultureInfo.InvariantCulture);
+                matrix.m02 = double.Parse(array[2], CultureInfo.InvariantCulture);
+                matrix.m03 = double.Parse(array[3], CultureInfo.InvariantCulture);
+                matrix.m10 = double.Parse(array[4], CultureInfo.InvariantCulture);
+                matrix.m11 = double.Parse(array[5], CultureInfo.InvariantCulture);
+                matrix.m12 = double.Parse(array[6], CultureInfo.InvariantCulture);
+                matrix.m13 = double.Parse(array[7], CultureInfo.InvariantCulture);
+                matrix.m20 = double.Parse(array[8], CultureInfo.InvariantCulture);
+                matrix.m21 = double.Parse(array[9], CultureInfo.InvariantCulture);
+                matrix.m22 = double.Parse(array[10], CultureInfo.InvariantCulture);
+                matrix.m23 = double.Parse(array[11], CultureInfo.InvariantCulture);
+                matrix.m30 = double.Parse(array[12], CultureInfo.InvariantCulture);
+                matrix.m31 = double.Parse(array[13], CultureInfo.InvariantCulture);
+                matrix.m32 = double.Parse(array[14], CultureInfo.InvariantCulture);
+                matrix.m33 = double.Parse(array[15], CultureInfo.InvariantCulture);
                 return matrix;
             }
             Debug.LogWarning("WARNING: Matrix4x4 entry is not formatted properly! Proper format for Matrix4x4 is 16 csv floats (m00,m01,m02,m03,m10,m11..m33)");
@@ -651,13 +616,13 @@ namespace KFUtil
         {
             return string.Concat(new string[]
             {
-                color.R.ToString("G17", CultureInfo.InvariantCulture),
+                color.r.ToString("G17", CultureInfo.InvariantCulture),
                 ",",
-                color.G.ToString("G17", CultureInfo.InvariantCulture),
+                color.g.ToString("G17", CultureInfo.InvariantCulture),
                 ",",
-                color.B.ToString("G17", CultureInfo.InvariantCulture),
+                color.b.ToString("G17", CultureInfo.InvariantCulture),
                 ",",
-                color.A.ToString("G17", CultureInfo.InvariantCulture),
+                color.a.ToString("G17", CultureInfo.InvariantCulture),
             });
         }
 
@@ -665,9 +630,9 @@ namespace KFUtil
         {
             return string.Concat(new string[]
             {
-                vector.X.ToString("G17", CultureInfo.InvariantCulture),
+                vector.x.ToString("G17", CultureInfo.InvariantCulture),
                 ",",
-                vector.Y.ToString("G17", CultureInfo.InvariantCulture)
+                vector.y.ToString("G17", CultureInfo.InvariantCulture)
             });
         }
 
@@ -675,11 +640,11 @@ namespace KFUtil
         {
             return string.Concat(new string[]
             {
-                vector.X.ToString("G17", CultureInfo.InvariantCulture),
+                vector.x.ToString("G17", CultureInfo.InvariantCulture),
                 ",",
-                vector.Y.ToString("G17", CultureInfo.InvariantCulture),
+                vector.y.ToString("G17", CultureInfo.InvariantCulture),
                 ",",
-                vector.Z.ToString("G17", CultureInfo.InvariantCulture)
+                vector.z.ToString("G17", CultureInfo.InvariantCulture)
             });
         }
 
@@ -687,13 +652,13 @@ namespace KFUtil
         {
             return string.Concat(new string[]
             {
-                vector.X.ToString("G17", CultureInfo.InvariantCulture),
+                vector.x.ToString("G17", CultureInfo.InvariantCulture),
                 ",",
-                vector.Y.ToString("G17", CultureInfo.InvariantCulture),
+                vector.y.ToString("G17", CultureInfo.InvariantCulture),
                 ",",
-                vector.Z.ToString("G17", CultureInfo.InvariantCulture),
+                vector.z.ToString("G17", CultureInfo.InvariantCulture),
                 ",",
-                vector.W.ToString("G17", CultureInfo.InvariantCulture)
+                vector.w.ToString("G17", CultureInfo.InvariantCulture)
             });
         }
 
@@ -701,13 +666,13 @@ namespace KFUtil
         {
             return string.Concat(new string[]
             {
-                quaternion.X.ToString("G17", CultureInfo.InvariantCulture),
+                quaternion.x.ToString("G17", CultureInfo.InvariantCulture),
                 ",",
-                quaternion.Y.ToString("G17", CultureInfo.InvariantCulture),
+                quaternion.y.ToString("G17", CultureInfo.InvariantCulture),
                 ",",
-                quaternion.Z.ToString("G17", CultureInfo.InvariantCulture),
+                quaternion.z.ToString("G17", CultureInfo.InvariantCulture),
                 ",",
-                quaternion.W.ToString("G17", CultureInfo.InvariantCulture)
+                quaternion.w.ToString("G17", CultureInfo.InvariantCulture)
             });
         }
 
@@ -715,43 +680,43 @@ namespace KFUtil
         {
             return string.Concat(new string[]
             {
-                matrix.M00.ToString("G17", CultureInfo.InvariantCulture),
+                matrix.m00.ToString("G17", CultureInfo.InvariantCulture),
                 ",",
-                matrix.M01.ToString("G17", CultureInfo.InvariantCulture),
+                matrix.m01.ToString("G17", CultureInfo.InvariantCulture),
                 ",",
-                matrix.M02.ToString("G17", CultureInfo.InvariantCulture),
+                matrix.m02.ToString("G17", CultureInfo.InvariantCulture),
                 ",",
-                matrix.M03.ToString("G17", CultureInfo.InvariantCulture),
+                matrix.m03.ToString("G17", CultureInfo.InvariantCulture),
                 ",",
-                matrix.M10.ToString("G17", CultureInfo.InvariantCulture),
+                matrix.m10.ToString("G17", CultureInfo.InvariantCulture),
                 ",",
-                matrix.M11.ToString("G17", CultureInfo.InvariantCulture),
+                matrix.m11.ToString("G17", CultureInfo.InvariantCulture),
                 ",",
-                matrix.M12.ToString("G17", CultureInfo.InvariantCulture),
+                matrix.m12.ToString("G17", CultureInfo.InvariantCulture),
                 ",",
-                matrix.M13.ToString("G17", CultureInfo.InvariantCulture),
+                matrix.m13.ToString("G17", CultureInfo.InvariantCulture),
                 ",",
-                matrix.M20.ToString("G17", CultureInfo.InvariantCulture),
+                matrix.m20.ToString("G17", CultureInfo.InvariantCulture),
                 ",",
-                matrix.M21.ToString("G17", CultureInfo.InvariantCulture),
+                matrix.m21.ToString("G17", CultureInfo.InvariantCulture),
                 ",",
-                matrix.M22.ToString("G17", CultureInfo.InvariantCulture),
+                matrix.m22.ToString("G17", CultureInfo.InvariantCulture),
                 ",",
-                matrix.M23.ToString("G17", CultureInfo.InvariantCulture),
+                matrix.m23.ToString("G17", CultureInfo.InvariantCulture),
                 ",",
-                matrix.M30.ToString("G17", CultureInfo.InvariantCulture),
+                matrix.m30.ToString("G17", CultureInfo.InvariantCulture),
                 ",",
-                matrix.M31.ToString("G17", CultureInfo.InvariantCulture),
+                matrix.m31.ToString("G17", CultureInfo.InvariantCulture),
                 ",",
-                matrix.M32.ToString("G17", CultureInfo.InvariantCulture),
+                matrix.m32.ToString("G17", CultureInfo.InvariantCulture),
                 ",",
-                matrix.M33.ToString("G17", CultureInfo.InvariantCulture)
+                matrix.m33.ToString("G17", CultureInfo.InvariantCulture)
             });
         }
 
         public override string ToString()
         {
-            return this._name;
+            return this.name;
         }
 
         private static string CleanupInput(string value)
@@ -769,17 +734,17 @@ namespace KFUtil
 
         private void CopyToRecursive(ConfigNode node, bool overwrite = false)
         {
-            if (node.Name == string.Empty)
+            if (node.name == string.Empty)
             {
-                node.Name = this._name;
+                node.name = this.name;
             }
-            if (node.Id == string.Empty)
+            if (node.id == string.Empty)
             {
-                node.Id = this._id;
+                node.id = this.id;
             }
-            if (!string.IsNullOrEmpty(this._comment))
+            if (!string.IsNullOrEmpty(this.comment))
             {
-                node.Comment = this._comment;
+                node.comment = this.comment;
             }
             int count = this._values.Count;
             for (int i = 0; i < count; i++)
@@ -787,11 +752,11 @@ namespace KFUtil
                 ConfigValue value = this._values[i];
                 if (overwrite)
                 {
-                    node.SetValue(value.Name, value.Value, value.Comment, true);
+                    node.SetValue(value.name, value.value, value.comment, true);
                 }
                 else
                 {
-                    node.AddValue(value.Name, value.Value, value.Comment);
+                    node.AddValue(value.name, value.value, value.comment);
                 }
             }
             int count2 = this._nodes.Count;
@@ -800,9 +765,9 @@ namespace KFUtil
                 ConfigNode node2 = this._nodes[j];
                 if (overwrite)
                 {
-                    node.RemoveNode(node2.Name);
+                    node.RemoveNode(node2.name);
                 }
-                node2.CopyToRecursive(node.AddNode(node2.Name), false);
+                node2.CopyToRecursive(node.AddNode(node2.name), false);
             }
         }
 
@@ -989,6 +954,273 @@ namespace KFUtil
                 }
             }
             return false;
+        }
+
+        private static bool ReadObject(object obj, ConfigNode node)
+        {
+            Type type = obj.GetType();
+            int count = node.Values.Count;
+            for (int i = 0; i < count; i++)
+            {
+                ConfigValue value = node.Values[i];
+                if (value.name == "name" || value.name == "id")
+                {
+                    continue;
+                }
+                if (value.name.StartsWith("node_") || value.name.StartsWith("sound_") || value.name.StartsWith("fx_"))
+                {
+                    continue;
+                }
+                FieldInfo property = type.GetField(value.name);
+                if (property != null)
+                {
+                    Type type2 = property.FieldType;
+                    if (ConfigNode.IsValue(type2))
+                    {
+                        object obj2 = ConfigNode.ReadValue(type2, value.value);
+                        property.SetValue(obj, obj2);
+                    }
+                }
+            }
+            return true;
+        }
+
+        private static bool IsValue(Type type)
+        {
+            if (type.IsValueType)
+            {
+                if (type == typeof(bool))
+                {
+                    return true;
+                }
+                else if (type == typeof(byte))
+                {
+                    return true;
+                }
+                else if (type == typeof(sbyte))
+                {
+                    return true;
+                }
+                else if (type == typeof(char))
+                {
+                    return true;
+                }
+                else if (type == typeof(decimal))
+                {
+                    return true;
+                }
+                else if (type == typeof(double))
+                {
+                    return true;
+                }
+                else if (type == typeof(float))
+                {
+                    return true;
+                }
+                else if (type == typeof(int))
+                {
+                    return true;
+                }
+                else if (type == typeof(uint))
+                {
+                    return true;
+                }
+                else if (type == typeof(long))
+                {
+                    return true;
+                }
+                else if (type == typeof(ulong))
+                {
+                    return true;
+                }
+                else if (type == typeof(short))
+                {
+                    return true;
+                }
+                else if (type == typeof(ushort))
+                {
+                    return true;
+                }
+                else if (type == typeof(Vector2))
+                {
+                    return true;
+                }
+                else if (type == typeof(Vector3))
+                {
+                    return true;
+                }
+                else if (type == typeof(Vector4))
+                {
+                    return true;
+                }
+                else if (type == typeof(Quaternion))
+                {
+                    return true;
+                }
+                else if (type == typeof(Color))
+                {
+                    return true;
+                }
+                else if (type == typeof(Matrix4x4))
+                {
+                    return true;
+                }
+                else if (type.IsEnum)
+                {
+                    return true;
+                }
+            }
+            else if (type == typeof(string))
+            {
+                return true;
+            }
+            return false;
+        }
+
+        private static object ReadValue(Type fieldType, string value)
+        {
+            NumberStyles style = NumberStyles.Number | NumberStyles.AllowDecimalPoint;
+            CultureInfo culture = CultureInfo.InvariantCulture;
+            if (fieldType.IsValueType)
+            {
+                if (fieldType == typeof(bool))
+                {
+                    bool flag = false;
+                    if (bool.TryParse(value, out flag))
+                    {
+                        return flag;
+                    }
+                }
+                else if (fieldType == typeof(byte))
+                {
+                    byte b = 0;
+                    if (byte.TryParse(value, style, culture, out b))
+                    {
+                        return b;
+                    }
+                }
+                else if (fieldType == typeof(sbyte))
+                {
+                    sbyte b2 = 0;
+                    if (sbyte.TryParse(value, style, culture, out b2))
+                    {
+                        return b2;
+                    }
+                }
+                else if (fieldType == typeof(char))
+                {
+                    char c = '\0';
+                    if (char.TryParse(value, out c))
+                    {
+                        return c;
+                    }
+                }
+                else if (fieldType == typeof(decimal))
+                {
+                    decimal num = 0m;
+                    if (decimal.TryParse(value, style, culture, out num))
+                    {
+                        return num;
+                    }
+                }
+                else if (fieldType == typeof(double))
+                {
+                    double num2 = 0.0;
+                    if (double.TryParse(value, style, culture, out num2))
+                    {
+                        return num2;
+                    }
+                }
+                else if (fieldType == typeof(float))
+                {
+                    float num3 = 0f;
+                    if (float.TryParse(value, style, culture, out num3))
+                    {
+                        return num3;
+                    }
+                }
+                else if (fieldType == typeof(int))
+                {
+                    int num4 = 0;
+                    if (int.TryParse(value, style, culture, out num4))
+                    {
+                        return num4;
+                    }
+                }
+                else if (fieldType == typeof(uint))
+                {
+                    uint num5 = 0u;
+                    if (uint.TryParse(value, style, culture, out num5))
+                    {
+                        return num5;
+                    }
+                }
+                else if (fieldType == typeof(long))
+                {
+                    long num6 = 0L;
+                    if (long.TryParse(value, style, culture, out num6))
+                    {
+                        return num6;
+                    }
+                }
+                else if (fieldType == typeof(ulong))
+                {
+                    ulong num7 = 0uL;
+                    if (ulong.TryParse(value, style, culture, out num7))
+                    {
+                        return num7;
+                    }
+                }
+                else if (fieldType == typeof(short))
+                {
+                    short num8 = 0;
+                    if (short.TryParse(value, style, culture, out num8))
+                    {
+                        return num8;
+                    }
+                }
+                else if (fieldType == typeof(ushort))
+                {
+                    ushort num9 = 0;
+                    if (ushort.TryParse(value, style, culture, out num9))
+                    {
+                        return num9;
+                    }
+                }
+                else if (fieldType == typeof(Vector2))
+                {
+                    return ConfigNode.ParseVector2(value);
+                }
+                else if (fieldType == typeof(Vector3))
+                {
+                    return ConfigNode.ParseVector3(value);
+                }
+                else if (fieldType == typeof(Vector4))
+                {
+                    return ConfigNode.ParseVector4(value);
+                }
+                else if (fieldType == typeof(Quaternion))
+                {
+                    return ConfigNode.ParseQuaternion(value);
+                }
+                else if (fieldType == typeof(Color))
+                {
+                    return ConfigNode.ParseColor(value);
+                }
+                else if (fieldType == typeof(Matrix4x4))
+                {
+                    return ConfigNode.ParseMatrix4x4(value);
+                }
+                else if (fieldType.IsEnum)
+                {
+                    return ConfigNode.ParseEnum(fieldType, value);
+                }
+            }
+            else if (fieldType == typeof(string))
+            {
+                return value;
+            }
+            return null;
         }
     }
 }

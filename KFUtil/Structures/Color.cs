@@ -4,61 +4,13 @@ namespace KFUtil
 {
     public struct Color
     {
-        private double _r;
+        public double r;
 
-        private double _g;
+        public double g;
 
-        private double _b;
+        public double b;
 
-        private double _a;
-
-        public double R
-        {
-            get
-            {
-                return this._r;
-            }
-            set
-            {
-                this._r = value;
-            }
-        }
-
-        public double G
-        {
-            get
-            {
-                return _g;
-            }
-            set
-            {
-                this._g = value;
-            }
-        }
-
-        public double B
-        {
-            get
-            {
-                return _b;
-            }
-            set
-            {
-                this._b = value;
-            }
-        }
-
-        public double A
-        {
-            get
-            {
-                return _a;
-            }
-            set
-            {
-                this._a = value;
-            }
-        }
+        public double a;
 
         public static Color Red
         {
@@ -155,13 +107,13 @@ namespace KFUtil
                 switch (index)
                 {
                     case 0:
-                        return this._r;
+                        return this.r;
                     case 1:
-                        return this._g;
+                        return this.g;
                     case 2:
-                        return this._b;
+                        return this.b;
                     case 3:
-                        return this._a;
+                        return this.a;
                     default:
                         throw new IndexOutOfRangeException("Invalid Vector3 index!");
                 }
@@ -171,16 +123,16 @@ namespace KFUtil
                 switch (index)
                 {
                     case 0:
-                        this._r = value;
+                        this.r = value;
                         break;
                     case 1:
-                        this._g = value;
+                        this.g = value;
                         break;
                     case 2:
-                        this._b = value;
+                        this.b = value;
                         break;
                     case 3:
-                        this._a = value;
+                        this.a = value;
                         break;
                     default:
                         throw new IndexOutOfRangeException("Invalid Vector3 index!");
@@ -190,36 +142,36 @@ namespace KFUtil
 
         public Color(double r, double g, double b, double a)
         {
-            this._r = r;
-            this._g = g;
-            this._b = b;
-            this._a = a;
+            this.r = r;
+            this.g = g;
+            this.b = b;
+            this.a = a;
         }
 
         public Color(double r, double g, double b)
         {
-            this._r = r;
-            this._g = g;
-            this._b = b;
-            this._a = 1.0;
+            this.r = r;
+            this.g = g;
+            this.b = b;
+            this.a = 1.0;
         }
 
         public void Set(double new_r, double new_g, double new_b, double new_a)
         {
-            this._r = new_r;
-            this._g = new_g;
-            this._b = new_b;
-            this._a = new_a;
+            this.r = new_r;
+            this.g = new_g;
+            this.b = new_b;
+            this.a = new_a;
         }
 
         public override string ToString()
         {
             return String.Format("RGBA({0:F3}, {1:F3}, {2:F3}, {3:F3})", new object[]
             {
-                this._r,
-                this._g,
-                this._b,
-                this._a
+                this.r,
+                this.g,
+                this.b,
+                this.a
             });
         }
 
@@ -227,10 +179,10 @@ namespace KFUtil
         {
             return String.Format("RGBA({0}, {1}, {2}, {3})", new object[]
             {
-                this._r.ToString(format),
-                this._g.ToString(format),
-                this._b.ToString(format),
-                this._a.ToString(format)
+                this.r.ToString(format),
+                this.g.ToString(format),
+                this.b.ToString(format),
+                this.a.ToString(format)
             });
         }
 
@@ -246,7 +198,7 @@ namespace KFUtil
                 return false;
             }
             Color color = (Color)other;
-            return this._r.Equals(color.R) && this._g.Equals(color.G) && this._b.Equals(color.B) && this._a.Equals(color.A);
+            return this.r.Equals(color.r) && this.g.Equals(color.g) && this.b.Equals(color.b) && this.a.Equals(color.a);
         }
     }
 }

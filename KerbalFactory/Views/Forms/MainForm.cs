@@ -102,11 +102,11 @@ namespace KerbalFactory.Views
             this.PartsTable.AddColumn("Skin Max Temperature", "Thermal Parameters", 80);
             foreach (PartResourceDefinition resource in this._resources)
             {
-                this.PartsTable.AddColumn(resource.Name + " (u)", "Resources", 100);
+                this.PartsTable.AddColumn(resource.name + " (u)", "Resources", 100);
             }
             foreach (PartResourceDefinition resource in this._resources)
             {
-                this.PartsTable.AddColumn(resource.Name + " (L)", "Calculations", 100);
+                this.PartsTable.AddColumn(resource.name + " (L)", "Calculations", 100);
             }
             this.PartsTable.AddColumn("Total Resources (u)", "Calculations", 100);
             this.PartsTable.AddColumn("Total Resources (L)", "Calculations", 100);
@@ -127,14 +127,14 @@ namespace KerbalFactory.Views
             foreach (Part part in this._parts)
             {
                 mods.Add(this.GetMod(part.PartUrl));
-                authors.Add(part.Author);
-                manufacturers.Add(part.Manufacturer);
-                categories.Add(part.Category.ToString());
+                authors.Add(part.author);
+                manufacturers.Add(part.manufacturer);
+                categories.Add(part.category.ToString());
                 techs.Add(part.TechRequired);
             }
             foreach(PartResourceDefinition def in this._resources)
             {
-                resources.Add(def.Name);
+                resources.Add(def.name);
             }
             this.PartsTable.AddFilter("Mod", mods.ToArray());
             this.PartsTable.AddFilter("Author", authors.ToArray());
@@ -177,29 +177,29 @@ namespace KerbalFactory.Views
             this.InitPartsTable();
             foreach (Part part in this._parts)
             {
-                double skinMaxTemp = part.SkinMaxTemp;
+                double skinMaxTemp = part.skinMaxTemp;
                 if (skinMaxTemp < 0)
                 {
-                    skinMaxTemp = part.MaxTemp;
+                    skinMaxTemp = part.maxTemp;
                 }
                 List<object> values = new List<object>()
                 {
-                    part.Name,
+                    part.name,
                     this.GetMod(part.PartUrl),
-                    part.Author,
-                    part.Title,
-                    part.Category,
-                    part.Manufacturer,
+                    part.author,
+                    part.title,
+                    part.category,
+                    part.manufacturer,
                     part.TechRequired,
-                    part.EntryCost,
-                    part.Cost,
-                    part.Mass,
-                    part.DragModelType,
-                    part.MaximumDrag,
-                    part.MinimumDrag,
-                    part.AngularDrag,
-                    part.CrashTolerance,
-                    part.MaxTemp,
+                    part.entryCost,
+                    part.cost,
+                    part.mass,
+                    part.dragModelType,
+                    part.maximum_drag,
+                    part.minimum_drag,
+                    part.angularDrag,
+                    part.crashTolerance,
+                    part.maxTemp,
                     skinMaxTemp
                 };
                 double total = 0;
@@ -207,13 +207,13 @@ namespace KerbalFactory.Views
                 double cost = 0;
                 foreach (PartResourceDefinition def in this._resources)
                 {
-                    if (part.Resources.Contains(def.Name))
+                    if (part.Resources.Contains(def.name))
                     {
-                        PartResource res = part.Resources[def.Name];
-                        values.Add(res.MaxAmount);
-                        total += res.MaxAmount;
-                        cost += res.MaxAmount * def.UnitCost;
-                        mass += res.MaxAmount * def.Density;
+                        PartResource res = part.Resources[def.name];
+                        values.Add(res.maxAmount);
+                        total += res.maxAmount;
+                        cost += res.maxAmount * def.unitCost;
+                        mass += res.maxAmount * def.density;
                     }
                     else
                     {
@@ -223,11 +223,11 @@ namespace KerbalFactory.Views
                 double total2 = 0;
                 foreach (PartResourceDefinition def in this._resources)
                 {
-                    if (part.Resources.Contains(def.Name))
+                    if (part.Resources.Contains(def.name))
                     {
-                        PartResource res = part.Resources[def.Name];
-                        values.Add(res.MaxAmount * def.Volume);
-                        total2 += res.MaxAmount * def.Volume;
+                        PartResource res = part.Resources[def.name];
+                        values.Add(res.maxAmount * def.volume);
+                        total2 += res.maxAmount * def.volume;
                     }
                     else
                     {
@@ -238,8 +238,8 @@ namespace KerbalFactory.Views
                 values.Add(total2);
                 values.Add(cost);
                 values.Add(mass);
-                values.Add(part.Cost - cost);
-                values.Add(part.Mass + mass);
+                values.Add(part.cost - cost);
+                values.Add(part.mass + mass);
                 this.PartsTable.AddRow(values.ToArray());
             }
             this.InitPartsFilters();
@@ -253,20 +253,20 @@ namespace KerbalFactory.Views
             {
                 this.ResourcesTable.AddRow(new object[]
                 {
-                    res.Name,
+                    res.name,
                     this.GetMod(res.ResourceUrl),
-                    res.Abbreviation,
-                    res.UnitCost,
-                    res.Volume,
-                    (res.Volume/1000),
-                    res.Density,
-                    ((res.Density*1000)/(res.Volume/1000)),
-                    res.SpecificHeatCapacity,
-                    res.IsTweakable,
-                    res.IsVisible,
-                    res.ResourceFlowMode,
-                    res.ResourceTransferMode,
-                    ConfigNode.WriteColor(res.Color)
+                    res.abbreviation,
+                    res.unitCost,
+                    res.volume,
+                    (res.volume/1000),
+                    res.density,
+                    ((res.density*1000)/(res.volume/1000)),
+                    res.hsp,
+                    res.isTweakable,
+                    res.isVisible,
+                    res.flowMode,
+                    res.transfer,
+                    ConfigNode.WriteColor(res.color)
                 });
             }
             this.InitResourcesFilters();

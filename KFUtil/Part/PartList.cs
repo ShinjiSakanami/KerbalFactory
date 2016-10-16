@@ -47,12 +47,12 @@ namespace KFUtil
             PDebug.Log(string.Concat(new object[]
             {
                 "Part: ",
-                part.Title,
+                part.title,
                 "(",
-                part.Name,
+                part.name,
                 ")"
             }));
-            this._dict.Add(part.Name, part);
+            this._dict.Add(part.name, part);
             return part;
         }
 
@@ -74,23 +74,23 @@ namespace KFUtil
             PDebug.Log(string.Concat(new object[]
             {
                 "Part: ",
-                part.Title,
+                part.title,
                 "(",
-                part.Name,
+                part.name,
                 ")"
             }));
-            this._dict.Add(part.Name, part);
+            this._dict.Add(part.name, part);
             return part;
         }
 
         public void Add(Part part)
         {
-            if (this.Contains(part.Name))
+            if (this.Contains(part.name))
             {
-                Debug.LogWarning("PartList: Already contains part of name '" + part.Name + "'");
+                Debug.LogWarning("PartList: Already contains part of name '" + part.name + "'");
                 return;
             }
-            this._dict.Add(part.Name, part);
+            this._dict.Add(part.name, part);
         }
 
         public bool Contains(string name)
@@ -110,7 +110,7 @@ namespace KFUtil
 
         public bool Remove(Part part)
         {
-            return this._dict.Remove(part.Name);
+            return this._dict.Remove(part.name);
         }
 
         public bool Remove(string name)

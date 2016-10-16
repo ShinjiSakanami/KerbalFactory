@@ -60,6 +60,7 @@
     <Compile Include="PartResource\PartResourceDefinition.cs" />
     <Compile Include="PartResource\PartResourceDefinitionList.cs" />
     <Compile Include="PartResource\PartResourceList.cs" />
+    <Compile Include="Part\AttachRules.cs" />
     <Compile Include="Part\Part.cs" />
     <Compile Include="Part\PartList.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />

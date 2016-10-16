@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
 
 namespace KFUtil
 {
@@ -35,43 +34,178 @@ namespace KFUtil
             NONE
         }
 
-        private string _name;
+        public enum PhysicalSignificance
+        {
+            FULL,
+            NONE
+        }
 
-        private string _manufacturer;
+        public enum VesselType
+        {
+            Debris,
+            SpaceObject,
+            Unknown,
+            Probe,
+            Relay,
+            Rover,
+            Lander,
+            Ship,
+            Plane,
+            Station,
+            Base,
+            EVA,
+            Flag
+        }
 
-        private string _author;
+        public enum PartModule
+        {
+            Part,
+            CompoundPart
+        }
 
-        private string _title;
+        public string name;
 
-        private string _description;
+        public PartModule module;
 
-        private PartCategory _category;
+        public string mesh;
 
-        private string _techRequired;
+        public double scale;
 
-        private int _entryCost;
+        public double rescaleFactor;
 
-        private double _cost;
+        public string texture;
 
-        private string _bulkheadProfiles;
+        public string normalmap;
 
-        private string _tags;
+        public double specPower;
 
-        private double _mass;
+        public double rimFalloff;
 
-        private Part.DragModel _dragModelType;
+        public double alphaCutoff;
 
-        private double _maximumDrag;
+        public Vector3 iconCenter;
 
-        private double _minimumDrag;
+        public string manufacturer;
 
-        private double _angularDrag;
+        public string author;
 
-        private double _crashTolerance;
+        public string title;
 
-        private double _maxTemp;
+        public string description;
 
-        private double _skinMaxTemp;
+        public PartCategory category;
+
+        public string subcategory;
+
+        public string TechRequired;
+
+        public int entryCost;
+
+        public double cost;
+
+        public string bulkheadProfiles;
+
+        public string tags;
+
+        public AttachRules attachRules;
+
+        public double mass;
+
+        public Part.DragModel dragModelType;
+
+        public double maximum_drag;
+
+        public double minimum_drag;
+
+        public double angularDrag;
+
+        public double crashTolerance;
+
+        public double breakingForce;
+
+        public double breakingTorque;
+
+        public double explosionPotential;
+
+        public bool fuelCrossFeed;
+
+        public string NoCrossFeedNodeKey;
+
+        public double maxTemp;
+
+        public double skinMaxTemp;
+
+        public double heatConductivity;
+
+        public double heatConvectiveConstant;
+
+        public double emissiveConstant;
+
+        public double thermalMassModifier;
+
+        public double skinInternalConductionMult;
+
+        public double radiatorHeadroom;
+
+        public double radiatorMax;
+
+        public double skinMassPerArea;
+
+        public Part.PhysicalSignificance PhysicsSignificance;
+
+        public Vector3 CoLOffset;
+
+        public Vector3 CoMOffset;
+
+        public Vector3 CoPOffset;
+
+        public Vector3 CenterOfDisplacement;
+
+        public Vector3 CenterOfBuoyancy;
+
+        public string stagingIcon;
+
+        public int stageOffset;
+
+        public int childStageOffset;
+
+        public int stackSymmetry;
+
+        public Vector3 mirrorRefAxis;
+
+        public int CrewCapacity;
+
+        public Part.VesselType vesselType;
+
+        public double buoyancy;
+
+        public string buoyancyUseCubeNamed;
+
+        public bool buoyancyUseSine;
+
+        public double bodyLiftMultiplier;
+
+        public bool inverseStageCarryover;
+
+        public double boundsMultiplier;
+
+        public Vector3 boundsCentroidOffset;
+
+        public bool bodyLiftOnlyUnattachedLift;
+
+        public string bodyLiftOnlyAttachName;
+
+        public bool noAutoEVAMulti;
+
+        public bool resourcePriorityUseParentInverseStage;
+
+        public bool ActivatesEvenIfDisconnected;
+
+        public bool skipColliderIgnores;
+
+        public Quaternion initRotation;
+
+        public double maxLength;
 
         private string _partUrl;
 
@@ -83,231 +217,7 @@ namespace KFUtil
 
         private UrlConfig _urlConfig;
 
-        PartResourceList _resources;
-
-        public string Name
-        {
-            get
-            {
-                return this._name;
-            }
-        }
-
-        public string Manufacturer
-        {
-            get
-            {
-                return this._manufacturer;
-            }
-            set
-            {
-                this._manufacturer = value;
-            }
-        }
-
-        public string Author
-        {
-            get
-            {
-                return this._author;
-            }
-            set
-            {
-                this._author = value;
-            }
-        }
-
-        public string Title
-        {
-            get
-            {
-                return this._title;
-            }
-            set
-            {
-                this._title = value;
-            }
-        }
-
-        public string Description
-        {
-            get
-            {
-                return this._description;
-            }
-            set
-            {
-                this._description = value;
-            }
-        }
-
-        public PartCategory Category
-        {
-            get
-            {
-                return this._category;
-            }
-            set
-            {
-                this._category = value;
-            }
-        }
-
-        public string TechRequired
-        {
-            get
-            {
-                return this._techRequired;
-            }
-            set
-            {
-                this._techRequired = value;
-            }
-        }
-
-        public int EntryCost
-        {
-            get
-            {
-                return this._entryCost;
-            }
-            set
-            {
-                this._entryCost = value;
-            }
-        }
-
-        public double Cost
-        {
-            get
-            {
-                return this._cost;
-            }
-            set
-            {
-                this._cost = value;
-            }
-        }
-
-        public string Tags
-        {
-            get
-            {
-                return this._tags;
-            }
-            set
-            {
-                this._tags = value;
-            }
-        }
-
-        public string BulkheadProfiles
-        {
-            get
-            {
-                return this._bulkheadProfiles;
-            }
-            set
-            {
-                this._bulkheadProfiles = value;
-            }
-        }
-
-        public double Mass
-        {
-            get
-            {
-                return this._mass;
-            }
-            set
-            {
-                this._mass = value;
-            }
-        }
-
-        public Part.DragModel DragModelType
-        {
-            get
-            {
-                return this._dragModelType;
-            }
-            set
-            {
-                this._dragModelType = value;
-            }
-        }
-
-        public double MaximumDrag
-        {
-            get
-            {
-                return this._maximumDrag;
-            }
-            set
-            {
-                this._maximumDrag = value;
-            }
-        }
-
-        public double MinimumDrag
-        {
-            get
-            {
-                return this._minimumDrag;
-            }
-            set
-            {
-                this._minimumDrag = value;
-            }
-        }
-
-        public double AngularDrag
-        {
-            get
-            {
-                return this._angularDrag;
-            }
-            set
-            {
-                this._angularDrag = value;
-            }
-        }
-
-        public double CrashTolerance
-        {
-            get
-            {
-                return this._crashTolerance;
-            }
-            set
-            {
-                this._crashTolerance = value;
-            }
-        }
-
-        public double MaxTemp
-        {
-            get
-            {
-                return this._maxTemp;
-            }
-            set
-            {
-                this._maxTemp = value;
-            }
-        }
-
-        public double SkinMaxTemp
-        {
-            get
-            {
-                return this._skinMaxTemp;
-            }
-            set
-            {
-                this._skinMaxTemp = value;
-            }
-        }
+        private PartResourceList _resources;
 
         public ConfigNode Config
         {
@@ -356,23 +266,57 @@ namespace KFUtil
 
         private void Init()
         {
-            this._name = "unknownPart";
-            this._author = "Unknown";
-            this._title = "Unknown Mystery Component";
-            this._manufacturer = "Found lying by the side of the road";
-            this._description = "Nothing is really known about this thing. Use it at your own risk.";
+            this.name = "unknownPart";
+            this.module = Part.PartModule.Part;
+            this.mesh = "model.mu";
+            this.rescaleFactor = 1.25;
+            this.author = "Unknown";
+            this.title = "Unknown Mystery Component";
+            this.manufacturer = "Found lying by the side of the road";
+            this.description = "Nothing is really known about this thing. Use it at your own risk.";
+            this.TechRequired = string.Empty;
+            this.bulkheadProfiles = string.Empty;
+            this.subcategory = "0";
+            this.tags = "*";
+            this.mass = 2.0;
+            this.dragModelType = Part.DragModel.CUBE;
+            this.maximum_drag = 0.1;
+            this.minimum_drag = 0.1;
+            this.angularDrag = 2.0;
+            this.crashTolerance = 9.0;
+            this.breakingForce = 22.0;
+            this.breakingTorque = 22.0;
+            this.explosionPotential = 0.5;
+            this.maxTemp = 2000;
+            this.skinMaxTemp = -1;
+            this.heatConductivity = 0.12;
+            this.heatConvectiveConstant = 1.0;
+            this.emissiveConstant = 0.4;
+            this.thermalMassModifier = 1.0;
+            this.skinInternalConductionMult = 1.0;
+            this.radiatorHeadroom = 0.25;
+            this.radiatorMax = 0.25;
+            this.skinMassPerArea = 1.0;
+            this.fuelCrossFeed = true;
+            this.buoyancy = 1.0;
+            this.buoyancyUseCubeNamed = string.Empty;
+            this.buoyancyUseSine = true;
+            this.bodyLiftMultiplier = 1.0;
+            this.iconCenter = Vector3.Zero;
+            this.CoLOffset = Vector3.Zero;
+            this.CoMOffset = Vector3.Zero;
+            this.CoPOffset = Vector3.Zero;
+            this.CenterOfBuoyancy = Vector3.Zero;
+            this.CenterOfDisplacement = Vector3.Zero;
+            this.boundsCentroidOffset = Vector3.Zero;
+            this.boundsMultiplier = 1.0;
+            this.stagingIcon = string.Empty;
+            this.inverseStageCarryover = true;
+            this.ActivatesEvenIfDisconnected = true;
+            this.initRotation = Quaternion.Identity;
+            this.maxLength = 10.0;
+            this.attachRules = new AttachRules();
             this._internalConfig = new ConfigNode();
-            this._techRequired = string.Empty;
-            this._bulkheadProfiles = string.Empty;
-            this._tags = "*";
-            this._mass = 2.0;
-            this._dragModelType = Part.DragModel.CUBE;
-            this._maximumDrag = 0.1;
-            this._minimumDrag = 0.1;
-            this._angularDrag = 2.0;
-            this._crashTolerance = 9.0;
-            this._maxTemp = 2000;
-            this._skinMaxTemp = -1;
             this._resources = new PartResourceList(this);
         }
 
@@ -387,76 +331,14 @@ namespace KFUtil
         public void Load(ConfigNode node)
         {
             this._config = node;
-            this._name = node.GetValue("name");
-            if (node.HasValue("author"))
-            {
-                this._author = node.GetValue("author");
-            }
-            if (node.HasValue("title"))
-            {
-                this._title = node.GetValue("title");
-            }
-            if (node.HasValue("manufacturer"))
-            {
-                this._manufacturer = node.GetValue("manufacturer");
-            }
-            if (node.HasValue("TechRequired"))
-            {
-                this._techRequired = node.GetValue("TechRequired");
-            }
-            if (node.HasValue("description"))
-            {
-                this._description = node.GetValue("description");
-            }
-            if (node.HasValue("category"))
-            {
-                this._category = (Part.PartCategory)((int)Enum.Parse(typeof(Part.PartCategory), node.GetValue("category")));
-            }
-            if (node.HasValue("entryCost"))
-            {
-                this._entryCost = ConfigNode.ParseInt(node.GetValue("entryCost"));
-            }
-            if (node.HasValue("cost"))
-            {
-                this._cost = ConfigNode.ParseDouble(node.GetValue("cost"));
-            }
-            if (node.HasValue("mass"))
-            {
-                this._mass = ConfigNode.ParseDouble(node.GetValue("mass"));
-            }
-            if (node.HasValue("dragModelType"))
-            {
-                this._dragModelType = (Part.DragModel)((int)Enum.Parse(typeof(Part.DragModel), node.GetValue("dragModelType").ToUpper()));
-            }
-            if (node.HasValue("maximum_drag"))
-            {
-                this._maximumDrag = ConfigNode.ParseDouble(node.GetValue("maximum_drag"));
-            }
-            if (node.HasValue("minimum_drag"))
-            {
-                this._minimumDrag = ConfigNode.ParseDouble(node.GetValue("minimum_drag"));
-            }
-            if (node.HasValue("angularDrag"))
-            {
-                this._angularDrag = ConfigNode.ParseDouble(node.GetValue("angularDrag"));
-            }
-            if (node.HasValue("crashTolerance"))
-            {
-                this._crashTolerance = ConfigNode.ParseDouble(node.GetValue("crashTolerance"));
-            }
-            if (node.HasValue("maxTemp"))
-            {
-                this._maxTemp = ConfigNode.ParseDouble(node.GetValue("maxTemp"));
-            }
-            if (node.HasValue("skinMaxTemp"))
-            {
-                this._skinMaxTemp = ConfigNode.ParseDouble(node.GetValue("skinMaxTemp"));
-            }
+            this.name = node.GetValue("name");
+            int count = node.Values.Count;
+            ConfigNode.LoadObjectFromConfig(this, node, false);
             ConfigNode[] resources = node.GetNodes("RESOURCE");
-            int count = resources.Length;
-            for (int i = 0; i < count; i++)
+            int count2 = resources.Length;
+            for (int j = 0; j < count2; j++)
             {
-                this._resources.Add(resources[i]);
+                this._resources.Add(resources[j]);
             }
         }
 
@@ -467,7 +349,7 @@ namespace KFUtil
 
         public override string ToString()
         {
-            return this._name;
+            return this.name;
         }
     }
 }

@@ -1,5 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 
 namespace KFUtil
 {
@@ -151,7 +150,7 @@ namespace KFUtil
             for (int i = 0; i < num; i++)
             {
                 PartResourceDefinition def = this._resourceDefinitions.Add(urlConfigs[i]);
-                Debug.Log("Resource " + def.Name + " added to database");
+                Debug.Log("Resource " + def.name + " added to database");
             }
         }
 
@@ -173,7 +172,7 @@ namespace KFUtil
             for (int i = 0; i < num; i++)
             {
                 Part part = this._parts.Add(urlConfigs[i]);
-                Debug.Log("Part " + part.Name + " added to database");
+                Debug.Log("Part " + part.name + " added to database");
             }
         }
     }
