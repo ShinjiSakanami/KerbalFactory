@@ -45,7 +45,6 @@ namespace KerbalFactory.Views
             this.TabControl.SelectTab(2);
             this.PartsTable.Clear();
             this.ResourcesTable.Clear();
-            this.TabControl.Enabled = false;
             GamePath kspPath = KFSettings.Instance.CurrentPath;
             if (kspPath != null)
             {
@@ -69,7 +68,6 @@ namespace KerbalFactory.Views
                 this.ResourcesTable.UpdateCountLabel();
                 this.openKSPDirectoryToolStripMenuItem.Enabled = true;
                 this.refreshDataToolStripMenuItem.Enabled = true;
-                this.TabControl.Enabled = true;
                 this.TabControl.SelectTab(0);
             }
             else

@@ -27,20 +27,6 @@ namespace KerbalFactory.Views
             this.FiltersTree.Nodes.Clear();
         }
 
-        public void Lock()
-        {
-            this.DataTable.Enabled = false;
-            this.ColumnsTree.Enabled = false;
-            this.FiltersTree.Enabled = false;
-        }
-
-        public void Unlock()
-        {
-            this.DataTable.Enabled = true;
-            this.ColumnsTree.Enabled = true;
-            this.FiltersTree.Enabled = true;
-        }
-
         public void CheckTrees()
         {
             this._ignoreCheck = true;
