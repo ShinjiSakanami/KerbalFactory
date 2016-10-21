@@ -54,38 +54,11 @@ namespace KFUtil
             def.Load(urlConfig, node);
             PDebug.Log(string.Concat(new object[]
             {
-                "ResourceDefinition: ",
+                "Resource definition '",
                 def.name,
-                "(",
-                def.id,
-                ")"
-            }));
-            this._dict.Add(def.id, def);
-            return def;
-        }
-
-        public PartResourceDefinition Add(ConfigNode node)
-        {
-            if (!node.HasValue("name"))
-            {
-                Debug.LogWarning("Config has no name field");
-                return null;
-            }
-            string name = node.GetValue("name");
-            if (this.Contains(name))
-            {
-                Debug.LogWarning("PartResourceList: Already contains resource of name '" + name + "'");
-                return null;
-            }
-            PartResourceDefinition def = new PartResourceDefinition();
-            def.Load(node);
-            PDebug.Log(string.Concat(new object[]
-            {
-                "ResourceDefinition: ",
-                def.name,
-                "(",
-                def.id,
-                ")"
+                "' loaded from '",
+                def.Mod,
+                "' mod"
             }));
             this._dict.Add(def.id, def);
             return def;

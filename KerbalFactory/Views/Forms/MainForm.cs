@@ -124,7 +124,7 @@ namespace KerbalFactory.Views
             List<string> resources = new List<string>();
             foreach (Part part in this._parts)
             {
-                mods.Add(this.GetMod(part.PartUrl));
+                mods.Add(part.Mod);
                 authors.Add(part.author);
                 manufacturers.Add(part.manufacturer);
                 categories.Add(part.category.ToString());
@@ -165,7 +165,7 @@ namespace KerbalFactory.Views
             List<string> mods = new List<string>();
             foreach (PartResourceDefinition resource in this._resources)
             {
-                mods.Add(this.GetMod(resource.ResourceUrl));
+                mods.Add(resource.Mod);
             }
             this.ResourcesTable.AddFilter("Mod", mods.ToArray());
         }
@@ -183,7 +183,7 @@ namespace KerbalFactory.Views
                 List<object> values = new List<object>()
                 {
                     part.name,
-                    this.GetMod(part.PartUrl),
+                    part.Mod,
                     part.author,
                     part.title,
                     part.category,
@@ -252,7 +252,7 @@ namespace KerbalFactory.Views
                 this.ResourcesTable.AddRow(new object[]
                 {
                     res.name,
-                    this.GetMod(res.ResourceUrl),
+                    res.Mod,
                     res.abbreviation,
                     res.unitCost,
                     res.volume,
@@ -269,19 +269,6 @@ namespace KerbalFactory.Views
             }
             this.InitResourcesFilters();
             this.ResourcesTable.CheckTrees();
-        }
-
-        public string GetMod(string url)
-        {
-            string[] array = url.Split(new char[]
-            {
-                '/'
-            });
-            if (array[0] == "data")
-            {
-                return array[1];
-            }
-            return array[0];
         }
 
         public void AddMessage(string message, bool log = true)

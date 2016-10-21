@@ -46,38 +46,13 @@ namespace KFUtil
             part.Load(urlConfig, node);
             PDebug.Log(string.Concat(new object[]
             {
-                "Part: ",
+                "Part '",
                 part.title,
-                "(",
+                " (",
                 part.name,
-                ")"
-            }));
-            this._dict.Add(part.name, part);
-            return part;
-        }
-
-        public Part Add(ConfigNode node)
-        {
-            if (!node.HasValue("name"))
-            {
-                Debug.LogWarning("Config has no name field");
-                return null;
-            }
-            string name = node.GetValue("name");
-            if (this.Contains(name))
-            {
-                Debug.LogWarning("PartList: Already contains part of name '" + name + "'");
-                return null;
-            }
-            Part part = new Part();
-            part.Load(node);
-            PDebug.Log(string.Concat(new object[]
-            {
-                "Part: ",
-                part.title,
-                "(",
-                part.name,
-                ")"
+                ")' loaded from '",
+                part.Mod,
+                "' mod"
             }));
             this._dict.Add(part.name, part);
             return part;

@@ -88,6 +88,30 @@ namespace KFUtil
             }
         }
 
+        public string Mod
+        {
+            get
+            {
+                string[] array = this._resourceUrl.Split(new char[]
+                {
+                    '/'
+                });
+                if (array.Length >= 2)
+                {
+                    if (array[0] == "data")
+                    {
+                        return array[1];
+                    }
+
+                }
+                if (array.Length >= 1)
+                {
+                    return array[0];
+                }
+                return null;
+            }
+        }
+
         public PartResourceDefinition()
         {
             this.Init();
@@ -119,7 +143,7 @@ namespace KFUtil
             this.Load(node);
         }
 
-        public void Load(ConfigNode node)
+        private void Load(ConfigNode node)
         {
             this._config = node;
             this.name = node.GetValue("name");

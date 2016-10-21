@@ -392,13 +392,16 @@ namespace KFUtil
             return true;
         }
 
-        public UrlDir[] GetDirectories()
+        public UrlDir[] GetDirectories(bool recursive = true)
         {
             List<UrlDir> list = new List<UrlDir>();
             foreach (UrlDir child in this._children)
             {
                 list.Add(child);
-                list.AddRange(child.GetDirectories());
+                if (recursive)
+                {
+                    list.AddRange(child.GetDirectories());
+                }
             }
             return list.ToArray();
         }
