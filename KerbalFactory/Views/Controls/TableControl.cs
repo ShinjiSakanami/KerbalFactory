@@ -40,6 +40,12 @@ namespace KerbalFactory.Views
             }
 
             this._ignoreCheck = false;
+            string calcText = "Calculations";
+            TreeNode calculations = this.ColumnsTree.Nodes[calcText.GetHashCode().ToString()];
+            if (calculations != null)
+            {
+                calculations.Checked = false;
+            }
         }
 
         public void UpdateCountLabel()

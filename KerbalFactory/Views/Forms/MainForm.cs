@@ -104,7 +104,14 @@ namespace KerbalFactory.Views
             }
             foreach (PartResourceDefinition resource in this._resources)
             {
-                this.PartsTable.AddColumn(resource.name + " (L)", "Calculations", 100);
+                if (resource.name == "ElectricCharge")
+                {
+                    this.PartsTable.AddColumn(resource.name + " (W)", "Calculations", 100);
+                }
+                else
+                {
+                    this.PartsTable.AddColumn(resource.name + " (L)", "Calculations", 100);
+                }
             }
             this.PartsTable.AddColumn("Total Resources (u)", "Calculations", 100);
             this.PartsTable.AddColumn("Total Resources (L)", "Calculations", 100);
@@ -224,8 +231,15 @@ namespace KerbalFactory.Views
                     if (part.Resources.Contains(def.name))
                     {
                         PartResource res = part.Resources[def.name];
-                        values.Add(res.maxAmount * def.volume);
-                        total2 += res.maxAmount * def.volume;
+                        if (res.name == "ElectricCharge")
+                        {
+                            values.Add(res.maxAmount * 1000);
+                        }
+                        else
+                        {
+                            values.Add(res.maxAmount * def.volume);
+                            total2 += res.maxAmount * def.volume;
+                        }
                     }
                     else
                     {
