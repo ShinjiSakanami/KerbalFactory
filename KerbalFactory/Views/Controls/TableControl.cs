@@ -27,27 +27,6 @@ namespace KerbalFactory.Views
             this.FiltersTree.Nodes.Clear();
         }
 
-        public void CheckTrees()
-        {
-            this._ignoreCheck = true;
-            foreach(TreeNode node in this.ColumnsTree.Nodes)
-            {
-                node.Checked = true;
-            }
-            foreach(TreeNode node2 in this.FiltersTree.Nodes)
-            {
-                node2.Checked = true;
-            }
-
-            this._ignoreCheck = false;
-            string calcText = "Calculations";
-            TreeNode calculations = this.ColumnsTree.Nodes[calcText.GetHashCode().ToString()];
-            if (calculations != null)
-            {
-                calculations.Checked = false;
-            }
-        }
-
         public void UpdateCountLabel()
         {
             int count = this.DataTable.Rows.Count;
@@ -62,22 +41,37 @@ namespace KerbalFactory.Views
             this.CountLabel.Text = countVisible + "/" + count;
         }
 
-        public void AddColumn(string text, string category, int size)
+        public DataGridViewColumn AddColumn(string text, string category, int size, bool visible = true)
         {
-            string name = text.GetHashCode().ToString();
-            int col = this.DataTable.Columns.Add(name, text);
-            this.DataTable.Columns[col].Width = size;
+            this._ignoreCheck = true;
+            string name = this.GetId(text);
+            if (!this.DataTable.Columns.Contains(name))
+            {
+                this.DataTable.Columns.Add(name, text);
+            }
+            DataGridViewColumn column = this.DataTable.Columns[name];
+            column.Width = size;
+            column.Visible = visible;
             string categoryName = category.GetHashCode().ToString();
             if (!this.ColumnsTree.Nodes.ContainsKey(categoryName))
             {
                 this.ColumnsTree.Nodes.Add(categoryName, category);
             }
             TreeNode node = this.ColumnsTree.Nodes[categoryName];
-            node.Nodes.Add(name, text);
+            if (!node.Nodes.ContainsKey(name))
+            {
+                node.Nodes.Add(name, text);
+            }
+            TreeNode node2 = node.Nodes[name];
+            node2.Checked = visible;
+            node2.Tag = column;
+            this._ignoreCheck = false;
+            return column;
         }
 
         public void AddFilter(string text, string[] values)
         {
+            this._ignoreCheck = true;
             string name = text.GetHashCode().ToString();
             if (!this.FiltersTree.Nodes.ContainsKey(name))
             {
@@ -86,6 +80,7 @@ namespace KerbalFactory.Views
             TreeNode node = this.FiltersTree.Nodes[name];
             Array.Sort(values);
             int count = values.Length;
+            
             for (int i = 0; i < count; i++)
             {
                 string value = values[i];
@@ -94,7 +89,10 @@ namespace KerbalFactory.Views
                 {
                     node.Nodes.Add(key, value);
                 }
+                TreeNode node2 = node.Nodes[key];
+                node2.Checked = true;
             }
+            this._ignoreCheck = false;
         }
 
         public int AddRow(object[] values)
@@ -106,6 +104,12 @@ namespace KerbalFactory.Views
                 this.AddValue(row, i, values[i]);
             }
             return row;
+        }
+
+        public void SetRows(DataGridViewRow[] rows)
+        {
+            this.DataTable.Rows.Clear();
+            this.DataTable.Rows.AddRange(rows);
         }
 
         private void AddValue(int rowIndex, int cellIndex, object value)
@@ -178,7 +182,7 @@ namespace KerbalFactory.Views
             foreach (TreeNode node in filter.Nodes)
             {
                 string name = node.Text + " (u)";
-                name = name.GetHashCode().ToString();
+                name = this.GetId(name);
                 if (this.DataTable.Columns.Contains(name))
                 {
                     DataGridViewColumn column = this.DataTable.Columns[name];
@@ -213,19 +217,9 @@ namespace KerbalFactory.Views
             return false;
         }
 
-        public void UpdateTableColumns()
+        private string GetId(string text)
         {
-            foreach (TreeNode node in this.ColumnsTree.Nodes)
-            {
-                foreach(TreeNode node2 in node.Nodes)
-                {
-                    string name = node2.Name;
-                    if (this.DataTable.Columns.Contains(name))
-                    {
-                        this.DataTable.Columns[name].Visible = node2.Checked;
-                    }
-                }
-            }
+            return text.GetHashCode().ToString();
         }
 
         private void ColumnsButton_Click(object sender, EventArgs e)
@@ -247,11 +241,15 @@ namespace KerbalFactory.Views
         {
             if (!this._ignoreCheck)
             {
-                this.UpdateTableColumns();
+                DataGridViewColumn column = (DataGridViewColumn)e.Node.Tag;
+                if (column != null)
+                {
+                    column.Visible = e.Node.Checked;
+                }
             }
         }
 
-        private void FiltersTree_AfterCheck(object sender, TreeViewEventArgs e)
+        private void FiltersTree_AfterChildsCheck(object sender, TreeViewEventArgs e)
         {
             if (!this._ignoreCheck)
             {

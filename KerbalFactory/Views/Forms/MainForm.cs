@@ -54,16 +54,17 @@ namespace KerbalFactory.Views
                 this.AddMessage("Start resource definitions load...");
                 await Task.Run(() => GameDatabase.Instance.LoadResourceDefinitions());
                 this._resources = GameDatabase.Instance.ResourceDefinitions;
-                this.LoadResourcesTable();
+                //this.LoadResourcesTable();
                 int count = this._resources.Count;
                 this.AddMessage(count + " resource definitions loaded.");
                 this.AddMessage("Start parts load...");
                 await Task.Run(() => GameDatabase.Instance.LoadParts());
                 this._parts = GameDatabase.Instance.Parts;
-                this.LoadPartsTable();
+               // this.LoadPartsTable();
                 count = this._parts.Count;
                 this.AddMessage(count + " parts loaded.");
                 this.Text = "KerbalFactory " + KFSettings.AppVersion + " - KSP " + kspPath.Version + " (" + kspPath.FullPath + ")";
+                this.LoadDataTest();
                 this.PartsTable.UpdateCountLabel();
                 this.ResourcesTable.UpdateCountLabel();
                 this.openKSPDirectoryToolStripMenuItem.Enabled = true;
@@ -79,6 +80,190 @@ namespace KerbalFactory.Views
             }
         }
 
+        private void LoadDataTest()
+        {
+            List<string> resources = new List<string>();
+            List<string> resourceMods = new List<string>();
+            List<string> partMods = new List<string>();
+            List<string> authors = new List<string>();
+            List<string> manufacturers = new List<string>();
+            List<string> categories = new List<string>();
+            List<string> techs = new List<string>();
+            this.InitResourcesTable();
+            this.InitPartsTableStart();
+            foreach (PartResourceDefinition resource in this._resources)
+            {
+                if (!resources.Contains(resource.name))
+                {
+                    resources.Add(resource.name);
+                }
+                if (!resourceMods.Contains(resource.Mod))
+                {
+                    resourceMods.Add(resource.Mod);
+                }
+                if (resource.name != "ElectricCharge")
+                {
+                    this.PartsTable.AddColumn(resource.name + " (u)", "Resources", 100, false);
+                    this.PartsTable.AddColumn(resource.name + " (L)", "Resources Volume (L)", 100, false);
+                    this.PartsTable.AddColumn(resource.name + " (t)", "Resources Mass (t)", 100, false);
+                    this.PartsTable.AddColumn(resource.name + " (f)", "Resources Cost (f)", 100, false);
+                }
+                this.ResourcesTable.AddRow(new object[]
+                {
+                    resource.name,
+                    resource.Mod,
+                    resource.abbreviation,
+                    resource.unitCost,
+                    resource.volume,
+                    (resource.volume/1000),
+                    resource.density,
+                    ((resource.density*1000)/(resource.volume/1000)),
+                    resource.hsp,
+                    resource.isTweakable,
+                    resource.isVisible,
+                    resource.flowMode,
+                    resource.transfer,
+                    ConfigNode.WriteColor(resource.color)
+                });
+            }
+            this.InitPartsTableEnd();
+            foreach (Part part in this._parts)
+            {
+                if (!partMods.Contains(part.Mod))
+                {
+                    partMods.Add(part.Mod);
+                }
+                if (!authors.Contains(part.author))
+                {
+                    authors.Add(part.author);
+                }
+                if (!manufacturers.Contains(part.manufacturer))
+                {
+                    manufacturers.Add(part.manufacturer);
+                }
+                if (!categories.Contains(part.category.ToString()))
+                {
+                    categories.Add(part.category.ToString());
+                }
+                if (!techs.Contains(part.TechRequired))
+                {
+                    techs.Add(part.TechRequired);
+                }
+                double skinMaxTemp = part.skinMaxTemp;
+                if (skinMaxTemp < 0)
+                {
+                    skinMaxTemp = part.maxTemp;
+                }
+                List<object> resValues = new List<object>();
+                double resTotal = 0.0;
+                double resVolume = 0.0;
+                double resMass = 0.0;
+                double resCost = 0.0;
+                double electricCharge = 0.0;
+                foreach (string resName in resources)
+                {
+                    if (part.Resources.Contains(resName))
+                    {
+                        PartResource resource = part.Resources.Get(resName);
+                        if (resource != null)
+                        {
+                            if (resource.name == "ElectricCharge")
+                            {
+                                electricCharge = resource.maxAmount;
+                            }
+                            else
+                            {
+                                PartResourceDefinition info = resource.Info;
+                                resValues.Add(resource.maxAmount);
+                                resValues.Add(resource.maxAmount * info.volume);
+                                resValues.Add(resource.maxAmount * info.density);
+                                resValues.Add(resource.maxAmount * info.unitCost);
+                                resTotal += resource.maxAmount;
+                                resVolume += resource.maxAmount * info.volume;
+                                resMass += resource.maxAmount * info.density;
+                                resCost += resource.maxAmount * info.unitCost;
+                            }
+                        }
+                    }
+                    else
+                    {
+                        resValues.Add(0.0);
+                        resValues.Add(0.0);
+                        resValues.Add(0.0);
+                        resValues.Add(0.0);
+                    }
+                }
+                List<object> values = new List<object>()
+                {
+                    part.name,
+                    part.Mod,
+                    part.author,
+                    part.title,
+                    part.category,
+                    part.manufacturer,
+                    part.TechRequired,
+                    part.entryCost,
+                    part.cost,
+                    part.mass,
+                    part.dragModelType,
+                    part.maximum_drag,
+                    part.minimum_drag,
+                    part.angularDrag,
+                    part.crashTolerance,
+                    part.maxTemp,
+                    skinMaxTemp,
+                    electricCharge
+                };
+                values.AddRange(resValues);
+                values.Add(resTotal);
+                values.Add(resVolume);
+                values.Add(resMass);
+                values.Add(resCost);
+                values.Add(part.mass);
+                values.Add(part.cost);
+                this.PartsTable.AddRow(values.ToArray());
+            }
+            this.ResourcesTable.AddFilter("Mod", resourceMods.ToArray());
+            this.PartsTable.AddFilter("Mod", partMods.ToArray());
+            this.PartsTable.AddFilter("Author", authors.ToArray());
+            this.PartsTable.AddFilter("Manufacturer", manufacturers.ToArray());
+            this.PartsTable.AddFilter("Category", categories.ToArray());
+            this.PartsTable.AddFilter("Technology", techs.ToArray());
+            this.PartsTable.AddFilter("Resources", resources.ToArray());
+        }
+
+        private void InitPartsTableStart()
+        {
+            this.PartsTable.AddColumn("Name", "General Parameters", 150);
+            this.PartsTable.AddColumn("Mod", "General Parameters", 100);
+            this.PartsTable.AddColumn("Author", "General Parameters", 150);
+            this.PartsTable.AddColumn("Title", "Editor Parameters", 300);
+            this.PartsTable.AddColumn("Category", "Editor Parameters", 100);
+            this.PartsTable.AddColumn("Manufacturer", "Editor Parameters", 150);
+            this.PartsTable.AddColumn("Technology", "Editor Parameters", 150);
+            this.PartsTable.AddColumn("Unlock Cost (f)", "Editor Parameters", 80);
+            this.PartsTable.AddColumn("Full Cost (f)", "Editor Parameters", 80);
+            this.PartsTable.AddColumn("Dry Mass (t)", "Standard Part Parameters", 80);
+            this.PartsTable.AddColumn("Drag Model", "Standard Part Parameters", 100);
+            this.PartsTable.AddColumn("Maximum Drag", "Standard Part Parameters", 80);
+            this.PartsTable.AddColumn("Minimum Drag", "Standard Part Parameters", 80);
+            this.PartsTable.AddColumn("Angular Drag", "Standard Part Parameters", 80);
+            this.PartsTable.AddColumn("Crash Tolerance (m/s)", "Standard Part Parameters", 120);
+            this.PartsTable.AddColumn("Max. Temperature (K)", "Thermal Parameters", 120);
+            this.PartsTable.AddColumn("Skin Max. Temperature (K)", "Thermal Parameters", 120);
+            this.PartsTable.AddColumn("Electric Capacity (kW)", "Resources", 100, false);
+        }
+
+        private void InitPartsTableEnd()
+        {
+            this.PartsTable.AddColumn("Total Resources (u)", "Calculations", 120, false);
+            this.PartsTable.AddColumn("Total Resources Volume (L)", "Calculations", 120, false);
+            this.PartsTable.AddColumn("Total Resources Mass (t)", "Calculations", 120, false);
+            this.PartsTable.AddColumn("Total Resources Cost (f)", "Calculations", 120, false);
+            this.PartsTable.AddColumn("Full Mass (t)", "Calculations", 100, false);
+            this.PartsTable.AddColumn("Dry Cost (f)", "Calculations", 100, false);
+        }
+
         private void InitPartsTable()
         {
             this.PartsTable.AddColumn("Name", "General Parameters", 150);
@@ -87,38 +272,34 @@ namespace KerbalFactory.Views
             this.PartsTable.AddColumn("Title", "Editor Parameters", 300);
             this.PartsTable.AddColumn("Category", "Editor Parameters", 100);
             this.PartsTable.AddColumn("Manufacturer", "Editor Parameters", 150);
-            this.PartsTable.AddColumn("Tech Required", "Editor Parameters", 150);
-            this.PartsTable.AddColumn("Entry Cost (f)", "Editor Parameters", 80);
+            this.PartsTable.AddColumn("Technology", "Editor Parameters", 150);
+            this.PartsTable.AddColumn("Unlock Cost (f)", "Editor Parameters", 80);
             this.PartsTable.AddColumn("Full Cost (f)", "Editor Parameters", 80);
             this.PartsTable.AddColumn("Dry Mass (t)", "Standard Part Parameters", 80);
             this.PartsTable.AddColumn("Drag Model", "Standard Part Parameters", 100);
             this.PartsTable.AddColumn("Maximum Drag", "Standard Part Parameters", 80);
             this.PartsTable.AddColumn("Minimum Drag", "Standard Part Parameters", 80);
             this.PartsTable.AddColumn("Angular Drag", "Standard Part Parameters", 80);
-            this.PartsTable.AddColumn("Crash Tolerance", "Standard Part Parameters", 80);
-            this.PartsTable.AddColumn("Max Temperature", "Thermal Parameters", 80);
-            this.PartsTable.AddColumn("Skin Max Temperature", "Thermal Parameters", 80);
+            this.PartsTable.AddColumn("Crash Tolerance (m/s)", "Standard Part Parameters", 120);
+            this.PartsTable.AddColumn("Max. Temperature (K)", "Thermal Parameters", 120);
+            this.PartsTable.AddColumn("Skin Max. Temperature (K)", "Thermal Parameters", 120);
+            this.PartsTable.AddColumn("Electric Capacity (kW)", "Resources", 100, false);
             foreach (PartResourceDefinition resource in this._resources)
             {
-                this.PartsTable.AddColumn(resource.name + " (u)", "Resources", 100);
-            }
-            foreach (PartResourceDefinition resource in this._resources)
-            {
-                if (resource.name == "ElectricCharge")
+                if (resource.name != "ElectricCharge")
                 {
-                    this.PartsTable.AddColumn(resource.name + " (W)", "Calculations", 100);
-                }
-                else
-                {
-                    this.PartsTable.AddColumn(resource.name + " (L)", "Calculations", 100);
+                    this.PartsTable.AddColumn(resource.name + " (u)", "Resources", 100, false);
+                    this.PartsTable.AddColumn(resource.name + " (L)", "Resources Volume (L)", 100, false);
+                    this.PartsTable.AddColumn(resource.name + " (t)", "Resources Mass (t)", 100, false);
+                    this.PartsTable.AddColumn(resource.name + " (f)", "Resources Cost (f)", 100, false);
                 }
             }
-            this.PartsTable.AddColumn("Total Resources (u)", "Calculations", 100);
-            this.PartsTable.AddColumn("Total Resources (L)", "Calculations", 100);
-            this.PartsTable.AddColumn("Resources Cost (f)", "Calculations", 100);
-            this.PartsTable.AddColumn("Resources Mass (t)", "Calculations", 100);
-            this.PartsTable.AddColumn("Dry Cost (f)", "Calculations", 100);
-            this.PartsTable.AddColumn("Full Mass (t)", "Calculations", 100);
+            this.PartsTable.AddColumn("Total Resources (u)", "Calculations", 120, false);
+            this.PartsTable.AddColumn("Total Resources Volume (L)", "Calculations", 120, false);
+            this.PartsTable.AddColumn("Total Resources Mass (t)", "Calculations", 120, false);
+            this.PartsTable.AddColumn("Total Resources Cost (f)", "Calculations", 120, false);
+            this.PartsTable.AddColumn("Full Mass (t)", "Calculations", 100, false);
+            this.PartsTable.AddColumn("Dry Cost (f)", "Calculations", 100, false);
         }
 
         private void InitPartsFilters()
@@ -145,7 +326,7 @@ namespace KerbalFactory.Views
             this.PartsTable.AddFilter("Author", authors.ToArray());
             this.PartsTable.AddFilter("Manufacturer",  manufacturers.ToArray());
             this.PartsTable.AddFilter("Category",  categories.ToArray());
-            this.PartsTable.AddFilter("Tech Required",  techs.ToArray());
+            this.PartsTable.AddFilter("Technology",  techs.ToArray());
             this.PartsTable.AddFilter("Resources", resources.ToArray());
         }
 
@@ -187,6 +368,41 @@ namespace KerbalFactory.Views
                 {
                     skinMaxTemp = part.maxTemp;
                 }
+                List<object> resValues = new List<object>();
+                double resTotal = 0.0;
+                double resVolume = 0.0;
+                double resMass = 0.0;
+                double resCost = 0.0;
+                double electricCharge = 0.0;
+                foreach (PartResourceDefinition info in this._resources)
+                {
+                    PartResource resource = part.Resources.Get(info.name);
+                    if (resource != null)
+                    {
+                        if (resource.name == "ElectricCharge")
+                        {
+                            electricCharge = resource.maxAmount;
+                        }
+                        else
+                        {
+                            resValues.Add(resource.maxAmount);
+                            resValues.Add(resource.maxAmount * info.volume);
+                            resValues.Add(resource.maxAmount * info.density);
+                            resValues.Add(resource.maxAmount * info.unitCost);
+                            resTotal += resource.maxAmount;
+                            resVolume += resource.maxAmount * info.volume;
+                            resMass += resource.maxAmount * info.density;
+                            resCost += resource.maxAmount * info.unitCost;
+                        }
+                    }
+                    else
+                    {
+                        resValues.Add(0.0);
+                        resValues.Add(0.0);
+                        resValues.Add(0.0);
+                        resValues.Add(0.0);
+                    }
+                }
                 List<object> values = new List<object>()
                 {
                     part.name,
@@ -205,57 +421,19 @@ namespace KerbalFactory.Views
                     part.angularDrag,
                     part.crashTolerance,
                     part.maxTemp,
-                    skinMaxTemp
+                    skinMaxTemp,
+                    electricCharge
                 };
-                double total = 0;
-                double mass = 0;
-                double cost = 0;
-                foreach (PartResourceDefinition def in this._resources)
-                {
-                    if (part.Resources.Contains(def.name))
-                    {
-                        PartResource res = part.Resources[def.name];
-                        values.Add(res.maxAmount);
-                        total += res.maxAmount;
-                        cost += res.maxAmount * def.unitCost;
-                        mass += res.maxAmount * def.density;
-                    }
-                    else
-                    {
-                        values.Add(0);
-                    }
-                }
-                double total2 = 0;
-                foreach (PartResourceDefinition def in this._resources)
-                {
-                    if (part.Resources.Contains(def.name))
-                    {
-                        PartResource res = part.Resources[def.name];
-                        if (res.name == "ElectricCharge")
-                        {
-                            values.Add(res.maxAmount * 1000);
-                        }
-                        else
-                        {
-                            values.Add(res.maxAmount * def.volume);
-                            total2 += res.maxAmount * def.volume;
-                        }
-                    }
-                    else
-                    {
-                        values.Add(0);
-                    }
-                }
-                values.Add(total);
-                values.Add(total2);
-                values.Add(cost);
-                values.Add(mass);
-                values.Add(part.cost - cost);
-                values.Add(part.mass + mass);
+                values.AddRange(resValues);
+                values.Add(resTotal);
+                values.Add(resVolume);
+                values.Add(resMass);
+                values.Add(resCost);
+                values.Add(part.mass);
+                values.Add(part.cost);
                 this.PartsTable.AddRow(values.ToArray());
             }
             this.InitPartsFilters();
-            this.PartsTable.CheckTrees();
         }
 
         private void LoadResourcesTable()
@@ -282,7 +460,6 @@ namespace KerbalFactory.Views
                 });
             }
             this.InitResourcesFilters();
-            this.ResourcesTable.CheckTrees();
         }
 
         public void AddMessage(string message, bool log = true)

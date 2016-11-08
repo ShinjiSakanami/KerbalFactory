@@ -162,7 +162,7 @@
             this.FiltersTree.Size = new System.Drawing.Size(150, 438);
             this.FiltersTree.TabIndex = 0;
             this.FiltersTree.TriStateStyleProperty = KerbalFactory.Views.KFTreeView.TriStateStyles.Installer;
-            this.FiltersTree.AfterCheck += new System.Windows.Forms.TreeViewEventHandler(this.FiltersTree_AfterCheck);
+            this.FiltersTree.AfterChildsCheck += new KerbalFactory.Views.AfterChildsCheck(this.FiltersTree_AfterChildsCheck);
             // 
             // SplitContainer2
             // 

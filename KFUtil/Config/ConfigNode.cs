@@ -452,7 +452,15 @@ namespace KFUtil
 
         public static Enum ParseEnum(Type enumType, string enumString)
         {
-            return (Enum)Enum.Parse(enumType, enumString, true);
+            try
+            {
+                return (Enum)Enum.Parse(enumType, enumString, true);
+            }
+            catch (ArgumentException)
+            {
+                Debug.LogWarning("Warning: '" + enumString + "' is not a valid value of " + enumType.Name);
+                return null;
+            }
         }
 
         public static Color ParseColor(string colorString)
