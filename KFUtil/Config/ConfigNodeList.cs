@@ -40,7 +40,7 @@ namespace KFUtil
             for (int i = 0; i < count; i++)
             {
                 ConfigNode node = this._nodes[i];
-                if (node.Name == name)
+                if (node.name == name)
                 {
                     if (num == index)
                     {
@@ -63,7 +63,7 @@ namespace KFUtil
             for (int i = 0; i < count; i++)
             {
                 ConfigNode node = this._nodes[i];
-                if (node.Name == name)
+                if (node.name == name)
                 {
                     if (node.GetValue(valueName) == value)
                     {
@@ -80,7 +80,7 @@ namespace KFUtil
             for (int i = 0; i < count; i++)
             {
                 ConfigNode node = this._nodes[i];
-                if (node.Id == id)
+                if (node.id == id)
                 {
                     return node;
                 }
@@ -107,7 +107,7 @@ namespace KFUtil
             for (int i = 0; i < count; i++)
             {
                 ConfigNode node = this._nodes[i];
-                if (node.Name == name)
+                if (node.name == name)
                 {
                     list.Add(node);
                 }
@@ -122,7 +122,7 @@ namespace KFUtil
             for (int i = 0; i < count; i++)
             {
                 ConfigNode node = this._nodes[i];
-                if (node.Name == name)
+                if (node.name == name)
                 {
                     if (node.GetValue(valueName) == value)
                     {
@@ -140,7 +140,7 @@ namespace KFUtil
             for (int i = 0; i < count; i++)
             {
                 ConfigNode node = this._nodes[i];
-                if (node.Name.StartsWith(name))
+                if (node.name.StartsWith(name))
                 {
                     list.Add(node);
                 }
@@ -155,7 +155,7 @@ namespace KFUtil
             for (int i = 0; i < count; i++)
             {
                 ConfigNode node = this._nodes[i];
-                if (node.Name == name)
+                if (node.name == name)
                 {
                     if (num == index)
                     {
@@ -163,7 +163,7 @@ namespace KFUtil
                         newNode.CopyTo(node);
                         if (!string.IsNullOrEmpty(newComment))
                         {
-                            node.Comment = newComment;
+                            node.comment = newComment;
                         }
                         return true;
                     }
@@ -172,10 +172,10 @@ namespace KFUtil
             }
             if (createIfNotFound)
             {
-                newNode.Name = name;
+                newNode.name = name;
                 if (!string.IsNullOrEmpty(newComment))
                 {
-                    newNode.Comment = newComment;
+                    newNode.comment = newComment;
                 }
                 this._nodes.Add(newNode);
                 return true;
@@ -216,7 +216,7 @@ namespace KFUtil
             int count = this._nodes.Count;
             for (int i = count - 1; i >= 0; i--)
             {
-                if (this._nodes[i].Name == name)
+                if (this._nodes[i].name == name)
                 {
                     this._nodes.RemoveAt(i);
                     return;
@@ -229,7 +229,7 @@ namespace KFUtil
             int count = this._nodes.Count;
             for (int i = count - 1; i >= 0; i--)
             {
-                if (this._nodes[i].Name == name)
+                if (this._nodes[i].name == name)
                 {
                     this._nodes.RemoveAt(i);
                 }
@@ -241,7 +241,7 @@ namespace KFUtil
             int count = this._nodes.Count;
             for (int i = count - 1; i >= 0; i--)
             {
-                if (this._nodes[i].Name.StartsWith(name))
+                if (this._nodes[i].name.StartsWith(name))
                 {
                     this._nodes.RemoveAt(i);
                 }
@@ -254,7 +254,7 @@ namespace KFUtil
             for (int i = 0; i < count; i++)
             {
                 ConfigNode node = this._nodes[i];
-                if (node.Name == name)
+                if (node.name == name)
                 {
                     return true;
                 }
@@ -269,9 +269,9 @@ namespace KFUtil
             for (int i = 0; i < count; i++)
             {
                 ConfigNode node = this._nodes[i];
-                if (!list.Contains(node.Name))
+                if (!list.Contains(node.name))
                 {
-                    list.Add(node.Name);
+                    list.Add(node.name);
                 }
             }
             return list.ToArray();
@@ -284,7 +284,7 @@ namespace KFUtil
             for (int i = 0; i < count; i++)
             {
                 ConfigNode node = this._nodes[i];
-                if (node.Name == name)
+                if (node.name == name)
                 {
                     num++;
                 }

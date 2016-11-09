@@ -54,51 +54,24 @@ namespace KFUtil
             def.Load(urlConfig, node);
             PDebug.Log(string.Concat(new object[]
             {
-                "ResourceDefinition: ",
-                def.Name,
-                "(",
-                def.Id,
-                ")"
+                "Resource definition '",
+                def.name,
+                "' loaded from '",
+                def.Mod,
+                "' mod"
             }));
-            this._dict.Add(def.Id, def);
-            return def;
-        }
-
-        public PartResourceDefinition Add(ConfigNode node)
-        {
-            if (!node.HasValue("name"))
-            {
-                Debug.LogWarning("Config has no name field");
-                return null;
-            }
-            string name = node.GetValue("name");
-            if (this.Contains(name))
-            {
-                Debug.LogWarning("PartResourceList: Already contains resource of name '" + name + "'");
-                return null;
-            }
-            PartResourceDefinition def = new PartResourceDefinition();
-            def.Load(node);
-            PDebug.Log(string.Concat(new object[]
-            {
-                "ResourceDefinition: ",
-                def.Name,
-                "(",
-                def.Id,
-                ")"
-            }));
-            this._dict.Add(def.Id, def);
+            this._dict.Add(def.id, def);
             return def;
         }
 
         public void Add(PartResourceDefinition def)
         {
-            if (this.Contains(def.Name))
+            if (this.Contains(def.name))
             {
-                Debug.LogWarning("PartResourceList: Already contains resource of name '" + def.Name + "'");
+                Debug.LogWarning("PartResourceList: Already contains resource of name '" + def.name + "'");
                 return;
             }
-            this._dict.Add(def.Id, def);
+            this._dict.Add(def.id, def);
         }
 
         public bool Contains(int id)
@@ -128,7 +101,7 @@ namespace KFUtil
 
         public bool Remove(PartResourceDefinition def)
         {
-            return this._dict.Remove(def.Id);
+            return this._dict.Remove(def.id);
         }
 
         public bool Remove(string name)

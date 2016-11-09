@@ -121,10 +121,10 @@ namespace KFUtil
 
         private UrlDir(UrlDir root, ConfigDirectory rootInfo)
         {
-            string path = UrlDir.CreateKSPPath(rootInfo.Directory);
+            string path = UrlDir.CreateKSPPath(rootInfo.directory);
             DirectoryInfo info = Directory.CreateDirectory(path);
-            this._name = rootInfo.UrlRoot;
-            this._type = rootInfo.Type;
+            this._name = rootInfo.urlRoot;
+            this._type = rootInfo.type;
             this.Create(root, info);
         }
 
@@ -392,13 +392,16 @@ namespace KFUtil
             return true;
         }
 
-        public UrlDir[] GetDirectories()
+        public UrlDir[] GetDirectories(bool recursive = true)
         {
             List<UrlDir> list = new List<UrlDir>();
             foreach (UrlDir child in this._children)
             {
                 list.Add(child);
-                list.AddRange(child.GetDirectories());
+                if (recursive)
+                {
+                    list.AddRange(child.GetDirectories());
+                }
             }
             return list.ToArray();
         }

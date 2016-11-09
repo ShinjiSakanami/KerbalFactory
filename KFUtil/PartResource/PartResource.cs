@@ -12,25 +12,25 @@ namespace KFUtil
             Both
         }
 
+        public string name;
+
+        public double amount;
+
+        public double maxAmount;
+
+        public bool flowState;
+
+        public bool isTweakable;
+
+        public bool hideFlow;
+
+        public bool isVisible;
+
+        public PartResource.FlowMode flowMode;
+
         private PartResourceDefinition _info;
 
         private Part _part;
-
-        private string _resourceName;
-
-        private double _amount;
-
-        private double _maxAmount;
-
-        private bool _flowState;
-
-        private bool _isTweakable;
-
-        private bool _hideFlow;
-
-        private bool _isVisible;
-
-        private PartResource.FlowMode _resourceFlowMode;
 
         public PartResourceDefinition Info
         {
@@ -48,102 +48,6 @@ namespace KFUtil
             }
         }
 
-        public string ResourceName
-        {
-            get
-            {
-                return this._resourceName;
-            }
-            set
-            {
-                this._resourceName = value;
-            }
-        }
-
-        public double Amount
-        {
-            get
-            {
-                return this._amount;
-            }
-            set
-            {
-                this._amount = value;
-            }
-        }
-
-        public double MaxAmount
-        {
-            get
-            {
-                return this._maxAmount;
-            }
-            set
-            {
-                this._maxAmount = value;
-            }
-        }
-
-        public bool FlowState
-        {
-            get
-            {
-                return this._flowState;
-            }
-            set
-            {
-                this._flowState = value;
-            }
-        }
-
-        public bool IsTweakable
-        {
-            get
-            {
-                return this._isTweakable;
-            }
-            set
-            {
-                this._isTweakable = value;
-            }
-        }
-
-        public bool HideFlow
-        {
-            get
-            {
-                return this._hideFlow;
-            }
-            set
-            {
-                this._hideFlow = value;
-            }
-        }
-
-        public bool IsVisible
-        {
-            get
-            {
-                return this._isVisible;
-            }
-            set
-            {
-                this._isVisible = value;
-            }
-        }
-
-        public PartResource.FlowMode ResourceFlowMode
-        {
-            get
-            {
-                return this._resourceFlowMode;
-            }
-            set
-            {
-                this._resourceFlowMode = value;
-            }
-        }
-
         public PartResource(Part p)
         {
             this._part = p;
@@ -152,85 +56,50 @@ namespace KFUtil
 
         private void Init()
         {
-            this._flowState = true;
-            this._isVisible = true;
-            this._resourceFlowMode = PartResource.FlowMode.Both;
+            this.flowState = true;
+            this.isVisible = true;
+            this.flowMode = PartResource.FlowMode.Both;
         }
 
         public void Load(ConfigNode node)
         {
-            if (node.HasValue("amount"))
-            {
-                this._amount = ConfigNode.ParseDouble(node.GetValue("amount"));
-            }
-            if (node.HasValue("maxAmount"))
-            {
-                this._maxAmount = ConfigNode.ParseDouble(node.GetValue("maxAmount"));
-            }
-            if (node.HasValue("flowState"))
-            {
-                this._flowState = ConfigNode.ParseBool(node.GetValue("flowState"));
-            }
-            if (node.HasValue("isTweakable"))
-            {
-                this._isTweakable = ConfigNode.ParseBool(node.GetValue("isTweakable"));
-            }
-            else
-            {
-                this._isTweakable = GameDatabase.Instance.GetResourceDefinition(this._resourceName).IsTweakable;
-            }
-            if (node.HasValue("isVisible"))
-            {
-                this._isVisible = ConfigNode.ParseBool(node.GetValue("isVisible"));
-            }
-            else
-            {
-                this._isVisible = GameDatabase.Instance.GetResourceDefinition(this._resourceName).IsVisible;
-            }
-            if (node.HasValue("hideFlow"))
-            {
-                this._hideFlow = ConfigNode.ParseBool(node.GetValue("hideFlow"));
-            }
-            if (node.HasValue("flowMode"))
-            {
-                this._resourceFlowMode = (PartResource.FlowMode)((int)Enum.Parse(typeof(PartResource.FlowMode), node.GetValue("flowMode")));
-            }
+            ConfigNode.LoadObjectFromConfig(this, node, false);
         }
 
         public void Save(ConfigNode node)
         {
-            node.AddValue("name", this._info.Name);
-            node.AddValue("amount", this._amount);
-            node.AddValue("maxAmount", this._maxAmount);
-            node.AddValue("flowState", this._flowState);
-            node.AddValue("isTweakable", this._isTweakable);
-            node.AddValue("hideFlow", this._hideFlow);
-            node.AddValue("isVisible", this._isVisible);
-            node.AddValue("flowMode", this._resourceFlowMode);
+            node.AddValue("name", this._info.name);
+            node.AddValue("amount", this.amount);
+            node.AddValue("maxAmount", this.maxAmount);
+            node.AddValue("flowState", this.flowState);
+            node.AddValue("isTweakable", this.isTweakable);
+            node.AddValue("hideFlow", this.hideFlow);
+            node.AddValue("isVisible", this.isVisible);
+            node.AddValue("flowMode", this.flowMode);
         }
 
         public void Copy(PartResource res)
         {
             this._info = res.Info;
-            this._resourceName = res.ResourceName;
-            this._amount = res.Amount;
-            this._maxAmount = res.MaxAmount;
-            this._flowState = res.FlowState;
-            this._isTweakable = res.IsTweakable;
-            this._isVisible = res.IsVisible;
-            this._hideFlow = res.HideFlow;
-            this._resourceFlowMode = res.ResourceFlowMode;
+            this.name = res.name;
+            this.amount = res.amount;
+            this.maxAmount = res.maxAmount;
+            this.flowState = res.flowState;
+            this.isTweakable = res.isTweakable;
+            this.isVisible = res.isVisible;
+            this.hideFlow = res.hideFlow;
+            this.flowMode = res.flowMode;
         }
 
         public void SetInfo(PartResourceDefinition info)
         {
             this._info = info;
-            this._resourceName = info.Name;
+            this.name = info.name;
         }
 
         public override string ToString()
         {
-            return this._resourceName;
+            return this.name;
         }
     }
 }

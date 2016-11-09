@@ -1,5 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 
 namespace KFUtil
 {
@@ -75,6 +74,18 @@ namespace KFUtil
             GameDatabase._KSPRootPath = kspPath;
             this.Reset();
             this._root = new UrlDir(this._configDirectories.ToArray(), new ConfigFileType[0]);
+            UrlDir data = this._root.GetDirectory("data");
+            foreach (UrlDir dir in  data.GetDirectories(false))
+            {
+                PDebug.Log(string.Concat(new object[]
+                {
+                    "Mod '",
+                    dir.Name,
+                    "' found with ",
+                    dir.GetConfigFiles().Length,
+                    " config files"
+                }));
+            }
         }
 
         private void Reset()
@@ -151,7 +162,6 @@ namespace KFUtil
             for (int i = 0; i < num; i++)
             {
                 PartResourceDefinition def = this._resourceDefinitions.Add(urlConfigs[i]);
-                Debug.Log("Resource " + def.Name + " added to database");
             }
         }
 
@@ -173,7 +183,6 @@ namespace KFUtil
             for (int i = 0; i < num; i++)
             {
                 Part part = this._parts.Add(urlConfigs[i]);
-                Debug.Log("Part " + part.Name + " added to database");
             }
         }
     }

@@ -1,5 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 
 namespace KFUtil
 {
@@ -55,11 +54,11 @@ namespace KFUtil
 
         public UrlConfig(UrlFile parent, ConfigNode node)
         {
-            this._type = node.Name;
+            this._type = node.name;
             this._parent = parent;
-            if (node.Name == string.Empty)
+            if (node.name == string.Empty)
             {
-                node.Name = parent.Name;
+                node.name = parent.Name;
             }
             if (node.HasValue("name"))
             {
@@ -67,7 +66,7 @@ namespace KFUtil
             }
             else
             {
-                this._name = node.Name;
+                this._name = node.name;
             }
             this._config = node;
         }
@@ -90,7 +89,7 @@ namespace KFUtil
             {
                 if (parentDir.Type == UrlDir.DirectoryType.Parts)
                 {
-                    configNode.Name = "PART";
+                    configNode.name = "PART";
                     list.Add(new UrlConfig(parent, configNode));
                     return list;
                 }
@@ -99,11 +98,11 @@ namespace KFUtil
             for (int i = 0; i < count; i++)
             {
                 ConfigNode configNode2 = configNode.Nodes[i];
-                if (configNode2.Name == string.Empty)
+                if (configNode2.name == string.Empty)
                 {
                     if (parentDir.Type == UrlDir.DirectoryType.Parts)
                     {
-                        configNode2.Name = "PARTS";
+                        configNode2.name = "PARTS";
                     }
                     else
                     {

@@ -2,64 +2,28 @@
 {
     public class ConfigValue
     {
-        private string _name;
+        public string name;
 
-        private string _value;
+        public string value;
 
-        private string _comment;
-
-        public string Name
-        {
-            get
-            {
-                return this._name;
-            }
-            set
-            {
-                this._name = value;
-            }
-        }
-
-        public string Value
-        {
-            get
-            {
-                return _value;
-            }
-            set
-            {
-                this._value = value;
-            }
-        }
-
-        public string Comment
-        {
-            get
-            {
-                return _comment;
-            }
-            set
-            {
-                this._comment = value;
-            }
-        }
+        public string comment;
 
         public ConfigValue(string name, string value)
         {
-            this._name = name;
-            this._value = value;
+            this.name = name;
+            this.value = value;
         }
 
         public ConfigValue(string name, string value, string comment)
         {
-            this._name = name;
-            this._value = value;
-            this._comment = comment;
+            this.name = name;
+            this.value = value;
+            this.comment = comment;
         }
 
         public override string ToString()
         {
-            return this._name + " = " + this._value;
+            return this.name + " = " + this.value;
         }
     }
 }

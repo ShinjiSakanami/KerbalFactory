@@ -154,7 +154,7 @@ namespace KFUtil
                 {
                     if (configFileType.Extensions[j] == this._extension)
                     {
-                        this._type = configFileType.Type;
+                        this._type = configFileType.type;
                         return;
                     }
                 }

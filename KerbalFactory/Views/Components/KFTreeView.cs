@@ -5,6 +5,8 @@ using System.Windows.Forms.VisualStyles;
 
 namespace KerbalFactory.Views
 {
+    public delegate void AfterChildsCheck(object sender, TreeViewEventArgs e);
+
     // Source : http://www.codeproject.com/Articles/202435/Tri-State-Tree-View
     public class KFTreeView : TreeView
     {
@@ -25,6 +27,8 @@ namespace KerbalFactory.Views
         private int IgnoreClickAction = 0;
 
         private TriStateStyles TriStateStyle = TriStateStyles.Standard;
+
+        public event AfterChildsCheck AfterChildsCheck;
 
         [Category("Tri-State Tree View")]
         [DisplayName("Style")]
@@ -85,6 +89,7 @@ namespace KerbalFactory.Views
             tn.StateImageIndex = tn.Checked ? (int)CheckedState.Checked : (int)CheckedState.UnChecked;
             this.UpdateChildState(e.Node.Nodes, e.Node.StateImageIndex, e.Node.Checked, false);
             this.UpdateParentState(e.Node.Parent);
+            this.OnAfterChildsCheck(e);
             this.IgnoreClickAction--;
         }
 
@@ -94,6 +99,14 @@ namespace KerbalFactory.Views
             this.IgnoreClickAction++;
             this.UpdateChildState(e.Node.Nodes, e.Node.StateImageIndex, e.Node.Checked, true);
             this.IgnoreClickAction--;
+        }
+
+        protected virtual void OnAfterChildsCheck(TreeViewEventArgs e)
+        {
+            if (AfterChildsCheck != null)
+            {
+                this.AfterChildsCheck(this, e);
+            }
         }
 
         protected void UpdateChildState(TreeNodeCollection Nodes, int StateImageIndex, bool Checked, bool ChangeUninitialisedNodesOnly)

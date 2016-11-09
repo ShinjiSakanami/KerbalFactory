@@ -40,11 +40,11 @@ namespace KFUtil
             for (int i = 0; i < count; i++)
             {
                 ConfigValue value = this._values[i];
-                if (value.Name == name)
+                if (value.name == name)
                 {
                     if (num == index)
                     {
-                        return value.Value;
+                        return value.value;
                     }
                     num++;
                 }
@@ -64,7 +64,7 @@ namespace KFUtil
             for (int i = 0; i < count; i++)
             {
                 ConfigValue value = this._values[i];
-                list.Add(value.Value);
+                list.Add(value.value);
             }
             return list.ToArray();
         }
@@ -76,9 +76,9 @@ namespace KFUtil
             for (int i = 0; i < count; i++)
             {
                 ConfigValue value = this._values[i];
-                if (value.Name == name)
+                if (value.name == name)
                 {
-                    list.Add(value.Value);
+                    list.Add(value.value);
                 }
             }
             return list.ToArray();
@@ -91,9 +91,9 @@ namespace KFUtil
             for (int i = 0; i < count; i++)
             {
                 ConfigValue value = this._values[i];
-                if (value.Name.StartsWith(name))
+                if (value.name.StartsWith(name))
                 {
-                    list.Add(value.Value);
+                    list.Add(value.value);
                 }
             }
             return list.ToArray();
@@ -106,14 +106,14 @@ namespace KFUtil
             for (int i = 0; i < count; i++)
             {
                 ConfigValue value = this._values[i];
-                if (value.Name == name)
+                if (value.name == name)
                 {
                     if (num == index)
                     {
-                        value.Value = newValue;
+                        value.value = newValue;
                         if (!string.IsNullOrEmpty(newComment))
                         {
-                            value.Comment = newComment;
+                            value.comment = newComment;
                         }
                         return true;
                     }
@@ -161,7 +161,7 @@ namespace KFUtil
             int count = this._values.Count;
             for (int i = count - 1; i >= 0; i--)
             {
-                if (this._values[i].Name == name)
+                if (this._values[i].name == name)
                 {
                     this._values.RemoveAt(i);
                     return;
@@ -174,7 +174,7 @@ namespace KFUtil
             int count = this._values.Count;
             for (int i = count - 1; i >= 0; i--)
             {
-                if (this._values[i].Name == name)
+                if (this._values[i].name == name)
                 {
                     this._values.RemoveAt(i);
                 }
@@ -186,7 +186,7 @@ namespace KFUtil
             int count = this._values.Count;
             for (int i = count - 1; i >= 0; i--)
             {
-                if (this._values[i].Name.StartsWith(name))
+                if (this._values[i].name.StartsWith(name))
                 {
                     this._values.RemoveAt(i);
                 }
@@ -195,7 +195,7 @@ namespace KFUtil
 
         public void SortByName()
         {
-            this._values.Sort((ConfigValue a, ConfigValue b) => a.Name.CompareTo(b.Name));
+            this._values.Sort((ConfigValue a, ConfigValue b) => a.name.CompareTo(b.name));
         }
 
         public bool Contains(string name)
@@ -204,7 +204,7 @@ namespace KFUtil
             for (int i = 0; i < count; i++)
             {
                 ConfigValue value = this._values[i];
-                if (value.Name == name)
+                if (value.name == name)
                 {
                     return true;
                 }
@@ -219,9 +219,9 @@ namespace KFUtil
             for (int i = 0; i < count; i++)
             {
                 ConfigValue value = this._values[i];
-                if (!list.Contains(value.Name))
+                if (!list.Contains(value.name))
                 {
-                    list.Add(value.Name);
+                    list.Add(value.name);
                 }
             }
             return list.ToArray();
@@ -234,7 +234,7 @@ namespace KFUtil
             for (int i = 0; i < count; i++)
             {
                 ConfigValue value = this._values[i];
-                if (value.Name == name)
+                if (value.name == name)
                 {
                     num++;
                 }

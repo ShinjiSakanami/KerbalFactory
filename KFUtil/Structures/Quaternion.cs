@@ -4,61 +4,13 @@ namespace KFUtil
 {
     public struct Quaternion
     {
-        private double _x;
+        public double x;
 
-        private double _y;
+        public double y;
 
-        private double _z;
+        public double z;
 
-        private double _w;
-
-        public double X
-        {
-            get
-            {
-                return _x;
-            }
-            set
-            {
-                this._x = value;
-            }
-        }
-
-        public double Y
-        {
-            get
-            {
-                return _y;
-            }
-            set
-            {
-                this._y = value;
-            }
-        }
-
-        public double Z
-        {
-            get
-            {
-                return _z;
-            }
-            set
-            {
-                this._z = value;
-            }
-        }
-
-        public double W
-        {
-            get
-            {
-                return _w;
-            }
-            set
-            {
-                this._w = value;
-            }
-        }
+        public double w;
 
         public double this[int index]
         {
@@ -67,13 +19,13 @@ namespace KFUtil
                 switch (index)
                 {
                     case 0:
-                        return this._x;
+                        return this.x;
                     case 1:
-                        return this._y;
+                        return this.y;
                     case 2:
-                        return this._z;
+                        return this.z;
                     case 3:
-                        return this._w;
+                        return this.w;
                     default:
                         throw new IndexOutOfRangeException("Invalid Quaternion index!");
                 }
@@ -83,16 +35,16 @@ namespace KFUtil
                 switch (index)
                 {
                     case 0:
-                        this._x = value;
+                        this.x = value;
                         break;
                     case 1:
-                        this._y = value;
+                        this.y = value;
                         break;
                     case 2:
-                        this._z = value;
+                        this.z = value;
                         break;
                     case 3:
-                        this._w = value;
+                        this.w = value;
                         break;
                     default:
                         throw new IndexOutOfRangeException("Invalid Quaternion index!");
@@ -110,28 +62,28 @@ namespace KFUtil
 
         public Quaternion(double x, double y, double z, double w)
         {
-            this._x = x;
-            this._y = y;
-            this._z = z;
-            this._w = w;
+            this.x = x;
+            this.y = y;
+            this.z = z;
+            this.w = w;
         }
 
         public void Set(double new_x, double new_y, double new_z, double new_w)
         {
-            this._x = new_x;
-            this._y = new_y;
-            this._z = new_z;
-            this._w = new_w;
+            this.x = new_x;
+            this.y = new_y;
+            this.z = new_z;
+            this.w = new_w;
         }
 
         public override string ToString()
         {
             return String.Format("({0:F1}, {1:F1}, {2:F1}, {3:F1})", new object[]
             {
-                this._x,
-                this._y,
-                this._z,
-                this._w
+                this.x,
+                this.y,
+                this.z,
+                this.w
             });
         }
 
@@ -139,16 +91,16 @@ namespace KFUtil
         {
             return String.Format("({0}, {1}, {2}, {3})", new object[]
             {
-                this._x.ToString(format),
-                this._y.ToString(format),
-                this._z.ToString(format),
-                this._w.ToString(format)
+                this.x.ToString(format),
+                this.y.ToString(format),
+                this.z.ToString(format),
+                this.w.ToString(format)
             });
         }
 
         public override int GetHashCode()
         {
-            return this._x.GetHashCode() ^ this._y.GetHashCode() << 2 ^ this._z.GetHashCode() >> 2 ^ this._w.GetHashCode() >> 1;
+            return this.x.GetHashCode() ^ this.y.GetHashCode() << 2 ^ this.z.GetHashCode() >> 2 ^ this.w.GetHashCode() >> 1;
         }
 
         public override bool Equals(object other)
@@ -158,7 +110,7 @@ namespace KFUtil
                 return false;
             }
             Quaternion quaternion = (Quaternion)other;
-            return this._x.Equals(quaternion.X) && this._y.Equals(quaternion.Y) && this._z.Equals(quaternion.Z) && this._w.Equals(quaternion.W);
+            return this.x.Equals(quaternion.x) && this.y.Equals(quaternion.y) && this.z.Equals(quaternion.z) && this.w.Equals(quaternion.w);
         }
     }
 }
