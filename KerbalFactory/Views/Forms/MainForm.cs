@@ -152,6 +152,11 @@ namespace KerbalFactory.Views
                 {
                     skinMaxTemp = part.maxTemp;
                 }
+                string internalName = string.Empty;
+                if (part.InternalConfig != null)
+                {
+                    internalName = part.InternalConfig.GetValue("name");
+                }
                 List<object> resValues = new List<object>();
                 double resTotal = 0.0;
                 double resVolume = 0.0;
@@ -196,6 +201,17 @@ namespace KerbalFactory.Views
                     part.name,
                     part.Mod,
                     part.author,
+                    part.mesh,
+                    part.scale,
+                    part.rescaleFactor,
+                    part.attachRules,
+                    part.bulkheadProfiles,
+                    part.CoMOffset,
+                    part.CoLOffset,
+                    part.CoPOffset,
+                    part.CenterOfDisplacement,
+                    part.CenterOfBuoyancy,
+                    part.buoyancy,
                     part.title,
                     part.category,
                     part.manufacturer,
@@ -208,6 +224,9 @@ namespace KerbalFactory.Views
                     part.minimum_drag,
                     part.angularDrag,
                     part.crashTolerance,
+                    part.vesselType,
+                    part.CrewCapacity,
+                    internalName,
                     part.maxTemp,
                     skinMaxTemp,
                     electricCharge
@@ -235,20 +254,41 @@ namespace KerbalFactory.Views
             this.PartsTable.AddColumn("Name", "General Parameters", 150);
             this.PartsTable.AddColumn("Mod", "General Parameters", 100);
             this.PartsTable.AddColumn("Author", "General Parameters", 150);
+
+            this.PartsTable.AddColumn("Mesh", "Asset Parameters", 100, false);
+            this.PartsTable.AddColumn("Scale", "Asset Parameters", 100, false);
+            this.PartsTable.AddColumn("Resclae Factor", "Asset Parameters", 100, false);
+
+            this.PartsTable.AddColumn("Attach Rules", "Node Definitions", 120, false);
+            this.PartsTable.AddColumn("Bulkhead Profiles", "Node Definitions", 120, false);
+            this.PartsTable.AddColumn("Center of Mass", "Node Definitions", 80, false);
+            this.PartsTable.AddColumn("Center of Lift", "Node Definitions", 80, false);
+            this.PartsTable.AddColumn("Center of Pressure", "Node Definitions", 80, false);
+            this.PartsTable.AddColumn("Center of Displacement", "Node Definitions", 80, false);
+            this.PartsTable.AddColumn("Center of Buoyancy", "Node Definitions", 80, false);
+            this.PartsTable.AddColumn("Buoyancy", "Node Definitions", 80, false);
+
             this.PartsTable.AddColumn("Title", "Editor Parameters", 300);
             this.PartsTable.AddColumn("Category", "Editor Parameters", 100);
             this.PartsTable.AddColumn("Manufacturer", "Editor Parameters", 150);
             this.PartsTable.AddColumn("Technology", "Editor Parameters", 150);
             this.PartsTable.AddColumn("Unlock Cost (f)", "Editor Parameters", 80);
             this.PartsTable.AddColumn("Full Cost (f)", "Editor Parameters", 80);
+
             this.PartsTable.AddColumn("Dry Mass (t)", "Standard Part Parameters", 80);
             this.PartsTable.AddColumn("Drag Model", "Standard Part Parameters", 100);
             this.PartsTable.AddColumn("Maximum Drag", "Standard Part Parameters", 80);
             this.PartsTable.AddColumn("Minimum Drag", "Standard Part Parameters", 80);
             this.PartsTable.AddColumn("Angular Drag", "Standard Part Parameters", 80);
             this.PartsTable.AddColumn("Crash Tolerance (m/s)", "Standard Part Parameters", 120);
+            this.PartsTable.AddColumn("Vessel Type", "Standard Part Parameters", 120);
+
+            this.PartsTable.AddColumn("Crew Capacity", "Internal Setup", 80, false);
+            this.PartsTable.AddColumn("Internal Name", "Internal Setup", 120, false);
+
             this.PartsTable.AddColumn("Max. Temperature (K)", "Thermal Parameters", 120);
             this.PartsTable.AddColumn("Skin Max. Temperature (K)", "Thermal Parameters", 120);
+
             this.PartsTable.AddColumn("Electric Capacity (kW)", "Resources", 100, false);
         }
 

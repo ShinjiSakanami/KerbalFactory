@@ -259,6 +259,14 @@ namespace KFUtil
             }
         }
 
+        public ConfigNode InternalConfig
+        {
+            get
+            {
+                return this._internalConfig;
+            }
+        }
+
         public string Mod
         {
             get
@@ -294,6 +302,7 @@ namespace KFUtil
             this.module = Part.PartModule.Part;
             this.mesh = "model.mu";
             this.rescaleFactor = 1.25;
+            this.scale = 1;
             this.author = "Unknown";
             this.title = "Unknown Mystery Component";
             this.manufacturer = "Found lying by the side of the road";
@@ -358,6 +367,12 @@ namespace KFUtil
             this.name = node.GetValue("name");
             int count = node.Values.Count;
             ConfigNode.LoadObjectFromConfig(this, node, false);
+            string attachRules = node.GetValue("attachRules");
+            if (!string.IsNullOrEmpty(attachRules))
+            {
+                this.attachRules = AttachRules.Parse(attachRules);
+            }
+            this._internalConfig = node.GetNode("INTERNAL");
             ConfigNode[] resources = node.GetNodes("RESOURCE");
             int count2 = resources.Length;
             for (int j = 0; j < count2; j++)
