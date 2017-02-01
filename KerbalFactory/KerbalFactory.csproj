@@ -42,6 +42,9 @@
     <ApplicationIcon>KerbalFactoryIcon.ico</ApplicationIcon>
   </PropertyGroup>
   <ItemGroup>
+    <Reference Include="KerbalParser">
+      <HintPath>..\..\KerbalParser\KerbalParser\bin\Debug\KerbalParser.dll</HintPath>
+    </Reference>
     <Reference Include="System" />
     <Reference Include="System.Core" />
     <Reference Include="System.Xml.Linq" />
@@ -169,12 +172,6 @@
   <ItemGroup>
     <Content Include="KerbalFactoryIcon.ico" />
     <Content Include="Resources\KerbalFactoryIcon.ico" />
-  </ItemGroup>
-  <ItemGroup>
-    <ProjectReference Include="..\KFUtil\KFUtil.csproj">
-      <Project>{d483f5e6-5c9b-4c2d-ad3c-0c1cac646839}</Project>
-      <Name>KFUtil</Name>
-    </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
